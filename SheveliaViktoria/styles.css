@@ -30,11 +30,12 @@ h1 {
     padding: 20px;
 }
 .container {
-    width: 500px;
+    width: 100%;
+    max-width: 600px;
     margin: 20px auto;
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
     gap: 20px;
 }
 .minesweeper {

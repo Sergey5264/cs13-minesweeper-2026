@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <header class="game-header">
+            <div class="status-item" title="Прапорці" aria-label="Кількість прапорців">
+                <span class="icon" aria-hidden="true">🚩</span>
+                <span id="flags-count">10</span>
+            </div>
+            
+            <button class="reset-button" id="reset-btn">Нова Гра</button>
+            
+            <div class="status-item" title="Час" aria-label="Минуло часу">
+                <span class="icon" aria-hidden="true">⏱</span>
+                <span id="timer">010</span>
+            </div>
+        </header>
+
+        <main class="game-board" id="board">
+            <button class="cell" aria-label="Закрита клітинка"></button> 
+            <button class="cell revealed number-1">1</button> 
+            <button class="cell revealed number-2">2</button>
+            <button class="cell revealed number-3">3</button>
+            <button class="cell flag" aria-label="Прапорець (можлива міна)">🚩</button> 
+            
+            <button class="cell revealed" aria-label="Відкрита пуста клітинка"></button>
+
+            <button class="cell flag-wrong" aria-label="Невірно поставлений прапорець">🚩</button>
+
+            <button class="cell mine" aria-label="Міна">💣</button> 
+            <button class="cell mine exploded" aria-label="Вибух міни">💥</button>
+            
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+            <button class="cell"></button>
+        </main>
+    </div>
+
+</body>
+</html>

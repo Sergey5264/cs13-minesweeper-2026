@@ -1,0 +1,258 @@
+/* Оголошуємо змінні */
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --cell-size: 30px;
+    --cell-size-mobile: 28px;
+    /* Змінні для кількості колонок */
+    --cols-easy: 8;
+    --cols-medium: 12;
+    --cols-hard: 16;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 900px;
+    width: 100%; /* Додано для адаптивності */
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ІНФО ПАНЕЛЬ */
+.info-panel {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 10px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1em;
+    color: #333;
+}
+
+.info-item span:first-child {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.info-item span:last-child {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+/* КНОПКИ */
+.difficulty-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.difficulty-btn {
+    padding: 10px 20px;
+    border: 2px solid #ddd;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    color: #333;
+}
+
+.difficulty-btn:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.difficulty-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.new-game-btn {
+    display: block; /* Тепер вона займає весь рядок */
+    margin: 0 auto 20px auto; 
+    padding: 12px 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* Ефект при наведенні мишки */
+.new-game-btn:hover {
+    transform: translateY(-4px) scale(1.03); /* Трохи піднімається і збільшується */
+    box-shadow: 0 8px 25px rgba(238, 9, 121, 0.6); 
+}
+
+/* Ефект при кліку */
+.new-game-btn:active {
+    transform: translateY(1px) scale(0.98); /* Протискається всередину */
+    box-shadow: 0 2px 10px rgba(238, 9, 121, 0.3);
+}
+
+/* ІГРОВЕ ПОЛЕ */
+.game-board {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 288px;
+    margin: 0 auto 20px auto;
+    gap: 4px; 
+    background: #e0e0e0;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Додали класи для різних рівнів складності (вирішує зауваження про жорстку сітку) */
+.game-board.easy { grid-template-columns: repeat(var(--cols-easy), var(--cell-size)); }
+.game-board.medium { grid-template-columns: repeat(var(--cols-medium), var(--cell-size)); }
+.game-board.hard { grid-template-columns: repeat(var(--cols-hard), var(--cell-size)); }
+
+/* СТАНИ КЛІТИНОК */
+.cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    background: linear-gradient(145deg, #ffffff, #dcdcdc);
+    border-radius: 4px; 
+    box-shadow: 2px 2px 4px #bebebe, -2px -2px 4px #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.cell:hover:not(.revealed) {
+    transform: translateY(-1px);
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+}
+
+/* Стан: відкрита */
+.cell.revealed {
+    background: #ececec;
+    box-shadow: inset 2px 2px 5px #c8c8c8, inset -2px -2px 5px #ffffff; /* Ефект вдавлення */
+    cursor: default;
+    border: none;
+}
+
+/* Стан: міна */
+.cell.mine {
+    color: #333;
+    font-size: 16px;
+}
+
+/* Стан: вибух міни (на яку натиснули) */
+.cell.mine.exploded {
+    background: #ff4d4d; /* Червоний фон */
+    box-shadow: inset 2px 2px 5px #cc0000;
+    color: white;
+    border: 1px solid #cc0000;
+    animation: shake 0.5s;
+}
+
+/* Стан: прапорець */
+.cell.flag {
+    color: #e74c3c;
+    font-size: 14px;
+}
+
+/* Кольори цифр */
+.num1 { color: #2980b9; }
+.num2 { color: #27ae60; }
+.num3 { color: #c0392b; }
+.num4 { color: #8e44ad; }
+.num5 { color: #d35400; }
+.num6 { color: #16a085; }
+.num7 { color: #2c3e50; }
+.num8 { color: #7f8c8d; }
+
+/* Анімація для повідомлень */
+.game-message {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    animation: slideIn 0.5s ease;
+}
+
+.game-message.hidden {
+    display: none;
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Адаптивність */
+@media (max-width: 600px) {
+    .container { padding: 15px; }
+    h1 { font-size: 1.8em; }
+    .info-panel { gap: 15px; }
+    .cell { width: 28px; height: 28px; }
+    
+    /* Оновлюємо ширину під менші клітинки */
+    .game-board { width: 272px; } 
+}

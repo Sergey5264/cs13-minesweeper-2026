@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сапер - Modern UI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Сапер 🎮</h1>
+        
+<div class="info-panel">
+            <div class="info-item">
+                <span>Мін:</span>
+                <span><span id="mineCount">10</span></span>
+            </div>
+            <div class="info-item">
+                <span>Прапори:</span>
+                <span><span id="flagCount">2</span></span>
+            </div>
+            <div class="info-item">
+                <span>Час:</span>
+                <span><span id="timer">42</span> s</span>
+            </div>
+        </div>
+
+        <div class="difficulty-buttons">
+            <button class="difficulty-btn active" data-level="easy">Легко (8x8)</button>
+            <button class="difficulty-btn" data-level="medium">Середньо (12x12)</button>
+            <button class="difficulty-btn" data-level="hard">Важко (16x16)</button>
+        </div>
+
+        <button id="newGameBtn" class="new-game-btn">🔄 Нова гра</button>
+
+        <div id="gameBoard" class="game-board">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+
+            <div class="cell flag">🚩</div>
+            <div class="cell flag">🚩</div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+
+            <div class="cell revealed"></div>
+            <div class="cell revealed"></div>
+            <div class="cell revealed"></div>
+            <div class="cell revealed"></div>
+            <div class="cell revealed"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+
+            <div class="cell revealed num1">1</div>
+            <div class="cell revealed num2">2</div>
+            <div class="cell revealed num3">3</div>
+            <div class="cell revealed num4">4</div>
+            <div class="cell revealed"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+
+            <div class="cell revealed mine">💣</div> <div class="cell revealed mine exploded">💥</div> <div class="cell revealed mine">💣</div>
+            <div class="cell revealed"></div>
+            <div class="cell revealed"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+
+            <div class="cell"></div> <div class="cell"></div> <div class="cell"></div> <div class="cell"></div>
+            <div class="cell"></div> <div class="cell"></div> <div class="cell"></div> <div class="cell"></div>
+            
+            <div class="cell"></div> <div class="cell"></div> <div class="cell"></div> <div class="cell"></div>
+            <div class="cell"></div> <div class="cell"></div> <div class="cell"></div> <div class="cell"></div>
+            
+            <div class="cell"></div> <div class="cell"></div> <div class="cell"></div> <div class="cell"></div>
+            <div class="cell"></div> <div class="cell"></div> <div class="cell"></div> <div class="cell"></div>
+        </div>
+
+        <div id="gameMessage" class="game-message hidden"></div>
+    </div>
+</body>
+</html>

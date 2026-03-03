@@ -86,7 +86,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .btn-restart:hover {
@@ -141,6 +141,10 @@ body {
 .cell.wrong-flag {
     background-color: var(--bg-wrong);
     border-color: #fdba74;
+}
+
+.cell.flag, .cell.mine {
+    background-color: var(--cell-open);
 }
 
 .cell.num-1 { color: var(--c-1); }

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Мінне поле</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="game-header">
+      <div class="game-header__title">Мінне поле</div>
+      <div class="game-header__status">
+        <div class="status-block">
+          <span class="status-block__label">Час</span>
+          <span id="timer" class="status-block__value">00:00</span>
+        </div>
+        <div class="status-block">
+          <span class="status-block__label">Знайдено прапорів</span>
+          <span id="flags-count" class="status-block__value">0 / 10</span>
+        </div>
+        <div class="status-block">
+          <span class="status-block__label">Перемоги</span>
+          <span id="wins-count" class="status-block__value">0</span>
+        </div>
+        <button id="new-game" class="button button--primary">Нова гра</button>
+      </div>
+    </header>
+
+    <main class="game-main">
+      <div class="game-grid" aria-label="Ігрове поле">
+        <!-- 10x10 клітинок, всі стартово закриті -->
+        <!-- 100 кнопок -->
+        <!-- Рядок 1 -->
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <!-- Рядок 2 -->
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <!-- Рядок 3 -->
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <!-- Рядок 4 -->
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <!-- Рядок 5 -->
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <!-- Рядок 6 -->
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <!-- Рядок 7 -->
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <!-- Рядок 8 -->
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <!-- Рядок 9 -->
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <!-- Рядок 10 -->
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+        <button class="cell cell--closed" type="button"></button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Таймер
+
+    const timerElement = document.getElementById('timer');
+    const newGameButton = document.getElementById('new-game');
+    const flagsCountElement = document.getElementById('flags-count');
+    const winsCountElement = document.getElementById('wins-count');
+    const gridElement = document.querySelector('.game-grid');
+    const cells = Array.from(gridElement.querySelectorAll('.cell'));
+
+    const TOTAL_FLAGS = 10;
+    const TOTAL_MINES = 5;
+
+    let timerInterval = null;
+    let secondsPassed = 0;
+    let flagsFound = 0;
+    let wins = 0;
+    let gameOver = false;
+    let flagPositions = new Set();
+    let minePositions = new Set();
+
+    function formatTime(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function updateFlagsDisplay() {
+      flagsCountElement.textContent = `${flagsFound} / ${TOTAL_FLAGS}`;
+    }
+
+    function updateWinsDisplay() {
+      winsCountElement.textContent = String(wins);
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function resetBoard() {
+      flagsFound = 0;
+      gameOver = false;
+      updateFlagsDisplay();
+
+      cells.forEach((cell) => {
+        cell.className = 'cell cell--closed';
+        cell.textContent = '';
+      });
+
+      // Згенерувати випадкові позиції прапорців та мін
+      const indices = shuffle(Array.from(cells.keys()));
+      flagPositions = new Set(indices.slice(0, TOTAL_FLAGS));
+      minePositions = new Set(indices.slice(TOTAL_FLAGS, TOTAL_FLAGS + TOTAL_MINES));
+    }
+
+    function startNewGame() {
+      // Скидання таймера
+      clearInterval(timerInterval);
+      secondsPassed = 0;
+      timerElement.textContent = '00:00';
+
+      // Скидання поля
+      resetBoard();
+
+      timerInterval = setInterval(() => {
+        secondsPassed += 1;
+        timerElement.textContent = formatTime(secondsPassed);
+      }, 1000);
+    }
+
+    newGameButton.addEventListener('click', startNewGame);
+
+    // Взаємодія з клітинками
+    // Лівий клік — відкрити клітинку
+    gridElement.addEventListener('click', (event) => {
+      const cell = event.target.closest('.cell');
+      if (!cell) return;
+
+      if (gameOver) return;
+
+      const index = cells.indexOf(cell);
+
+      // Не відкривати вже відкриті
+      if (!cell.classList.contains('cell--closed')) {
+        return;
+      }
+
+      // Якщо це міна — гра закінчена
+      if (minePositions.has(index)) {
+        cell.classList.remove('cell--closed');
+        cell.classList.add('cell--mine-hit');
+
+        // Показати інші міни
+        cells.forEach((c, i) => {
+          if (minePositions.has(i) && i !== index) {
+            if (c.classList.contains('cell--closed')) {
+              c.classList.remove('cell--closed');
+              c.classList.add('cell--mine');
+            }
+          }
+        });
+
+        gameOver = true;
+        clearInterval(timerInterval);
+        return;
+      }
+
+      // Якщо це прапорець — гравець його "знаходить"
+      if (flagPositions.has(index)) {
+        cell.classList.remove('cell--closed');
+        cell.classList.add('cell--flag');
+        flagsFound += 1;
+        updateFlagsDisplay();
+
+        // Перевірка на перемогу
+        if (flagsFound === TOTAL_FLAGS) {
+          gameOver = true;
+          clearInterval(timerInterval);
+          wins += 1;
+          updateWinsDisplay();
+        }
+      } else {
+        // Порожня безпечна клітинка
+        cell.classList.remove('cell--closed');
+        cell.classList.add('cell--open');
+      }
+    });
+
+    // Почати гру одразу при завантаженні
+    startNewGame();
+  </script>
+</body>
+</html>

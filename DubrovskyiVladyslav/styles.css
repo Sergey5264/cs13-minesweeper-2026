@@ -3,6 +3,10 @@
     --border-light: #ffffff;
     --border-dark: #7b7b7b;
     --lcd-red: #ff0000;
+
+    /* Копілот хотів це: гнучкі налаштування поля */
+    --grid-size: 10;
+    --cell-size: 30px;
 }
 
 body {
@@ -11,7 +15,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
 }
 
@@ -64,25 +68,33 @@ body {
     border: 3px inset var(--border-light);
 }
 
-/* ІГРОВЕ ПОЛЕ 10x10 */
+/* ІГРОВЕ ПОЛЕ — тепер на змінних */
 .game-board {
     display: grid;
-    grid-template-columns: repeat(10, 30px); /* 10 стовпців */
-    grid-template-rows: repeat(10, 30px);    /* 10 рядків */
+    grid-template-columns: repeat(var(--grid-size), var(--cell-size));
+    grid-template-rows: repeat(var(--grid-size), var(--cell-size));
     border: 3px inset var(--border-light);
     background-color: var(--border-dark);
 }
 
 .cell {
-    width: 30px;
-    height: 30px;
+    /* Скидання стилів кнопки для клітинки */
+    padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+
+    /* Використання змінної розміру */
+    width: var(--cell-size);
+    height: var(--cell-size);
+
     background-color: var(--bg-color);
     border: 3px outset var(--border-light);
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-family: Arial, sans-serif;
     box-sizing: border-box;
     user-select: none;
 }
@@ -91,17 +103,20 @@ body {
 .cell.open {
     border: 1px solid var(--border-dark);
     background-color: #d1d1d1;
+    cursor: default; /* Відкрита клітинка вже не кнопка по суті */
 }
 
-.cell.flag::before { content: "🚩"; font-size: 16px; }
-.cell.mine::before { content: "💣"; font-size: 16px; }
+.cell.flag::before { content: "🚩"; }
+.cell.mine::before { content: "💣"; }
 
 .cell.mine.exploded {
     background-color: #ff0000;
     border: 1px solid var(--border-dark);
 }
 
-/* Кольори цифр (класика) */
+/* Кольори цифр */
 .num-1 { color: blue; }
 .num-2 { color: green; }
 .num-3 { color: red; }
+.num-4 { color: darkblue; }
+.num-5 { color: darkred; }

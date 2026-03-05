@@ -2,7 +2,7 @@ class Minesweeper {
     // Константи для уникнення "магічних рядків"
     static STATUS = { PROCESS: 'process', WIN: 'win', LOSE: 'lose' };
     static CELL_TYPE = { EMPTY: 'empty', MINE: 'mine' };
-    static CELL_STATE = { CLOSED: 'closed', OPENED: 'opened', FLAGGED: 'flagged' };
+    static CELL_STATE = { CLOSED: 'closed', OPENED: 'open', FLAGGED: 'flagged' };
 
     constructor(rows = 10, cols = 10, minesCount = 15) {
         this.rows = rows;
@@ -22,6 +22,7 @@ class Minesweeper {
         this.field = this._generateField();
         this._countAllNeighbors();
         this._startTimer();
+
         console.log(`🎮 Гра ініціалізована: ${this.rows}x${this.cols}, мін: ${this.minesCount}`);
     }
 
@@ -42,14 +43,15 @@ class Minesweeper {
         // Розстановка мін через генератор випадкових унікальних координат
         let planted = 0;
         while (planted < this.minesCount) {
-            const r = Math.floor(Math.random() * this.rows);
-            const c = Math.floor(Math.random() * this.cols);
+            const row = Math.floor(Math.random() * this.rows);
+            const col = Math.floor(Math.random() * this.cols);
 
-            if (field[r][c].type !== Minesweeper.CELL_TYPE.MINE) {
-                field[r][c].type = Minesweeper.CELL_TYPE.MINE;
+            if (field[row][col].type !== Minesweeper.CELL_TYPE.MINE) {
+                field[row][col].type = Minesweeper.CELL_TYPE.MINE;
                 planted++;
             }
         }
+
         return field;
     }
 
@@ -58,11 +60,13 @@ class Minesweeper {
      * @private
      */
     _countAllNeighbors() {
-        this._forEachCell((r, c) => {
-            if (this.field[r][c].type === Minesweeper.CELL_TYPE.MINE) return;
+        this._forEachCell((row, col) => {
+            if (this.field[row][col].type === Minesweeper.CELL_TYPE.MINE) {
+                return;
+            }
 
-            this.field[r][c].neighborMines = this._getNeighbors(r, c)
-                .filter(([nr, nc]) => this.field[nr][nc].type === Minesweeper.CELL_TYPE.MINE)
+            this.field[row][col].neighborMines = this._getNeighbors(row, col)
+                .filter(([neighbourRow, neighbourCol]) => this.field[neighbourRow][neighbourCol].type === Minesweeper.CELL_TYPE.MINE)
                 .length;
         });
     }
@@ -71,17 +75,23 @@ class Minesweeper {
      * Отримує координати всіх валідних сусідів клітинки
      * @private
      */
-    _getNeighbors(r, c) {
+    _getNeighbors(row, col) {
         const neighbors = [];
-        for (let dr = -1; dr <= 1; dr++) {
-            for (let dc = -1; dc <= 1; dc++) {
-                if (dr === 0 && dc === 0) continue;
-                const nr = r + dr, nc = c + dc;
-                if (nr >= 0 && nr < this.rows && nc >= 0 && nc < this.cols) {
-                    neighbors.push([nr, nc]);
+        for (let directionalRow = -1; directionalRow <= 1; directionalRow++) {
+            for (let directionalCol = -1; directionalCol <= 1; directionalCol++) {
+                if (directionalRow === 0 && directionalCol === 0) {
+                    continue;
+                }
+
+                const neighbourRow = row + directionalRow;
+                const neighbourCol = col + directionalCol;
+
+                if (neighbourRow >= 0 && neighbourRow < this.rows && neighbourCol >= 0 && neighbourCol < this.cols) {
+                    neighbors.push([neighbourRow, neighbourCol]);
                 }
             }
         }
+
         return neighbors;
     }
 
@@ -90,9 +100,9 @@ class Minesweeper {
      * @private
      */
     _forEachCell(callback) {
-        for (let r = 0; r < this.rows; r++) {
-            for (let c = 0; c < this.cols; c++) {
-                callback(r, c);
+        for (let row = 0; row < this.rows; row++) {
+            for (let col = 0; col < this.cols; col++) {
+                callback(row, col);
             }
         }
     }
@@ -100,16 +110,22 @@ class Minesweeper {
     /**
      * Публічний метод для відкриття клітинки
      */
-    openCell(r, c) {
+    openCell(row, col) {
         // Defensive programming: перевірка меж та стану
-        if (!this._isValidCoords(r, c)) return;
-        const cell = this.field[r][c];
+        if (!this._isValidCoords(row, col)) {
+            return;
+        }
+
+        const cell = this.field[row][col];
 
         if (this.status !== Minesweeper.STATUS.PROCESS ||
-            cell.state !== Minesweeper.CELL_STATE.CLOSED) return;
+            cell.state !== Minesweeper.CELL_STATE.CLOSED) {
+            return;
+        }
 
         if (cell.type === Minesweeper.CELL_TYPE.MINE) {
             this._terminate(Minesweeper.STATUS.LOSE);
+
             return;
         }
 
@@ -117,46 +133,60 @@ class Minesweeper {
 
         // Рекурсивне відкриття при 0 мін поруч
         if (cell.neighborMines === 0) {
-            this._getNeighbors(r, c).forEach(([nr, nc]) => this.openCell(nr, nc));
+            this._getNeighbors(row, col).forEach(([neighbourRow, neighbourCol]) =>
+                this.openCell(neighbourRow, neighbourCol)
+            );
         }
 
         this._checkWin();
     }
 
-    toggleFlag(r, c) {
-        if (!this._isValidCoords(r, c)) return;
-        const cell = this.field[r][c];
+    toggleFlag(row, col) {
+        if (!this._isValidCoords(row, col)) {
+            return;
+        }
+
+        const cell = this.field[row][col];
 
         if (cell.state === Minesweeper.CELL_STATE.OPENED ||
-            this.status !== Minesweeper.STATUS.PROCESS) return;
+            this.status !== Minesweeper.STATUS.PROCESS) {
+            return;
+        }
 
         cell.state = cell.state === Minesweeper.CELL_STATE.FLAGGED
             ? Minesweeper.CELL_STATE.CLOSED
             : Minesweeper.CELL_STATE.FLAGGED;
     }
 
-    _isValidCoords(r, c) {
-        return r >= 0 && r < this.rows && c >= 0 && c < this.cols;
+    _isValidCoords(row, col) {
+        return row >= 0 && row < this.rows && col >= 0 && col < this.cols;
     }
 
     _startTimer() {
-        if (this.timerId) clearInterval(this.timerId);
+        if (this.timerId) {
+            clearInterval(this.timerId);
+        }
+
         this.timerId = setInterval(() => {
             this.gameTime++;
         }, 1000);
     }
 
     _checkWin() {
-        let hasClosedEmpty = false;
-        this._forEachCell((r, c) => {
-            const cell = this.field[r][c];
+        let hasUnopenedEmpty = false;
+
+        this._forEachCell((row, col) => {
+            const cell = this.field[row][col];
+            // Перевіряємо, чи є порожні клітинки, які не були відкриті (включаючи зафлагані)
             if (cell.type === Minesweeper.CELL_TYPE.EMPTY &&
-                cell.state === Minesweeper.CELL_STATE.CLOSED) {
-                hasClosedEmpty = true;
+                cell.state !== Minesweeper.CELL_STATE.OPENED) {
+                hasUnopenedEmpty = true;
             }
         });
 
-        if (!hasClosedEmpty) this._terminate(Minesweeper.STATUS.WIN);
+        if (!hasUnopenedEmpty) {
+            this._terminate(Minesweeper.STATUS.WIN);
+        }
     }
 
     _terminate(finalStatus) {
@@ -165,9 +195,9 @@ class Minesweeper {
 
         // Відкриваємо всі міни при програші
         if (finalStatus === Minesweeper.STATUS.LOSE) {
-            this._forEachCell((r, c) => {
-                if (this.field[r][c].type === Minesweeper.CELL_TYPE.MINE) {
-                    this.field[r][c].state = Minesweeper.CELL_STATE.OPENED;
+            this._forEachCell((row, col) => {
+                if (this.field[row][col].type === Minesweeper.CELL_TYPE.MINE) {
+                    this.field[row][col].state = Minesweeper.CELL_STATE.OPENED;
                 }
             });
         }

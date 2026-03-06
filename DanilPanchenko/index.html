@@ -1,19 +1,207 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-	<meta charset="UTF-8">
-	<title>Сапер</title>
-	<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сапер</title>
+  <link rel="stylesheet" href="minesweeper.css">
 </head>
 <body>
-	<h1>Сапер</h1>
-	<div class="controls">
-		<button onclick="startGame(8,8,10)">Легкий</button>
-		<button onclick="startGame(12,12,25)">Середній</button>
-		<button onclick="startGame(16,16,50)">Складний</button>
-	</div>
-	<div id="status"></div>
-	<div id="game"></div>
-	<script src="script.js"></script>
+  <h1>💣 Сапер</h1>
+  <div class="game-panel">
+    <div class="controls">
+      <span class="mines-count">Міни: <b id="minesLeft">10</b></span>
+      <button class="btn" id="newGame">Нова гра</button>
+      <span class="timer">Час: <b id="timer">0</b></span>
+    </div>
+    <div class="board-wrap">
+      <div class="board" id="board"></div>
+    </div>
+    <div class="message" id="message"></div>
+    <div class="difficulty">
+      <button class="btn active" data-rows="9" data-cols="9" data-mines="10">Легко</button>
+      <button class="btn" data-rows="16" data-cols="16" data-mines="40">Середньо</button>
+      <button class="btn" data-rows="16" data-cols="30" data-mines="99">Важко</button>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  const boardEl = document.getElementById('board');
+  const minesLeftEl = document.getElementById('minesLeft');
+  const timerEl = document.getElementById('timer');
+  const messageEl = document.getElementById('message');
+  let rows = 9, cols = 9, mines = 10;
+  let grid = [], revealed = [], flags = [], gameOver = false, started = false, timerId = 0, seconds = 0;
+
+  function init() {
+    gameOver = false;
+    started = false;
+    if (timerId) clearInterval(timerId);
+    timerId = 0;
+    seconds = 0;
+    timerEl.textContent = '0';
+    messageEl.textContent = '';
+    messageEl.className = 'message';
+    grid = [];
+    revealed = [];
+    flags = [];
+    for (let r = 0; r < rows; r++) {
+      grid[r] = [];
+      revealed[r] = [];
+      flags[r] = [];
+      for (let c = 0; c < cols; c++) {
+        grid[r][c] = 0;
+        revealed[r][c] = false;
+        flags[r][c] = false;
+      }
+    }
+    let placed = 0;
+    while (placed < mines) {
+      const r = Math.floor(Math.random() * rows);
+      const c = Math.floor(Math.random() * cols);
+      if (grid[r][c] !== -1) {
+        grid[r][c] = -1;
+        placed++;
+      }
+    }
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (grid[r][c] === -1) continue;
+        let n = 0;
+        for (let dr = -1; dr <= 1; dr++)
+          for (let dc = -1; dc <= 1; dc++) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] === -1) n++;
+          }
+        grid[r][c] = n;
+      }
+    }
+    render();
+  }
+
+  function render() {
+    minesLeftEl.textContent = mines - flags.flat().filter(Boolean).length;
+    boardEl.style.gridTemplateColumns = `repeat(${cols}, var(--cell-size))`;
+    boardEl.innerHTML = '';
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.r = r;
+        cell.dataset.c = c;
+        updateCell(cell, r, c);
+        cell.addEventListener('click', () => click(r, c));
+        cell.addEventListener('contextmenu', (e) => { e.preventDefault(); flag(r, c); });
+        boardEl.appendChild(cell);
+      }
+    }
+  }
+
+  function updateCell(cell, r, c) {
+    cell.className = 'cell';
+    cell.textContent = '';
+    if (flags[r][c]) {
+      cell.classList.add('flagged');
+      cell.textContent = '🚩';
+      return;
+    }
+    if (!revealed[r][c]) return;
+    cell.classList.add('revealed');
+    const v = grid[r][c];
+    if (v === -1) {
+      cell.classList.add('mine');
+      cell.textContent = '💣';
+    } else if (v > 0) {
+      cell.classList.add('num-' + v);
+      cell.textContent = v;
+    }
+  }
+
+  function startTimer() {
+    if (timerId) return;
+    timerId = setInterval(() => {
+      seconds++;
+      timerEl.textContent = seconds;
+    }, 1000);
+  }
+
+  function click(r, c) {
+    if (gameOver || revealed[r][c] || flags[r][c]) return;
+    if (!started) {
+      started = true;
+      startTimer();
+    }
+    if (grid[r][c] === -1) {
+      revealAll();
+      gameOver = true;
+      messageEl.textContent = 'Ви програли!';
+      messageEl.classList.add('lose');
+      if (timerId) clearInterval(timerId);
+      return;
+    }
+    reveal(r, c);
+    if (checkWin()) {
+      gameOver = true;
+      messageEl.textContent = 'Перемога!';
+      messageEl.classList.add('win');
+      if (timerId) clearInterval(timerId);
+    }
+  }
+
+  function reveal(r, c) {
+    if (r < 0 || r >= rows || c < 0 || c >= cols || revealed[r][c] || flags[r][c]) return;
+    revealed[r][c] = true;
+    const cell = boardEl.querySelector(`[data-r="${r}"][data-c="${c}"]`);
+    if (cell) updateCell(cell, r, c);
+    if (grid[r][c] === 0) {
+      for (let dr = -1; dr <= 1; dr++)
+        for (let dc = -1; dc <= 1; dc++) reveal(r + dr, c + dc);
+    }
+  }
+
+  function revealAll() {
+    for (let r = 0; r < rows; r++)
+      for (let c = 0; c < cols; c++)
+        revealed[r][c] = true;
+    const cells = boardEl.querySelectorAll('.cell');
+    cells.forEach(cell => {
+      const r = +cell.dataset.r, c = +cell.dataset.c;
+      updateCell(cell, r, c);
+    });
+  }
+
+  function flag(r, c) {
+    if (gameOver || revealed[r][c]) return;
+    if (!started) startTimer();
+    flags[r][c] = !flags[r][c];
+    const cell = boardEl.querySelector(`[data-r="${r}"][data-c="${c}"]`);
+    if (cell) updateCell(cell, r, c);
+    minesLeftEl.textContent = mines - flags.flat().filter(Boolean).length;
+  }
+
+  function checkWin() {
+    let revealedSafe = 0;
+    for (let r = 0; r < rows; r++)
+      for (let c = 0; c < cols; c++)
+        if (revealed[r][c] && grid[r][c] !== -1) revealedSafe++;
+    return revealedSafe === rows * cols - mines;
+  }
+
+  document.getElementById('newGame').addEventListener('click', init);
+  document.querySelectorAll('.difficulty .btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.difficulty .btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      rows = +this.dataset.rows;
+      cols = +this.dataset.cols;
+      mines = +this.dataset.mines;
+      init();
+    });
+  });
+
+  init();
+})();
+  </script>
 </body>
 </html>

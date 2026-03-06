@@ -1,196 +1,186 @@
+
+:root {
+  --cell-size: 36px;
+  --cell-bg: #c0c0c0;
+  --cell-border: #808080;
+  --cell-revealed: #bdbdbd;
+  --cell-mine: #2d2d2d;
+  --num-1: #0000ff;
+  --num-2: #008000;
+  --num-3: #ff0000;
+  --num-4: #000080;
+  --num-5: #800000;
+  --num-6: #008080;
+  --num-7: #000000;
+  --num-8: #808080;
+  --flag: #e74c3c;
+  --bg: #1a1a2e;
+  --panel: #16213e;
+  --text: #eaeaea;
+  --accent: #e94560;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-	background: #f8fafc;
-	color: #222;
-	font-family: 'Segoe UI', Arial, sans-serif;
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 
 h1 {
-	text-align: center;
-	margin-top: 24px;
-	color: #3b82f6;
-	letter-spacing: 2px;
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.game-panel {
+  background: var(--panel);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
 .controls {
-	display: flex;
-	justify-content: center;
-	gap: 12px;
-	margin: 20px 0 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
-.controls button {
-	background: #e0e7ef;
-	color: #2563eb;
-	border: none;
-	border-radius: 6px;
-	padding: 8px 18px;
-	font-size: 1rem;
-	cursor: pointer;
-	box-shadow: 0 2px 8px #e0e7ef80;
-	transition: background 0.2s, color 0.2s;
-}
-.controls button:hover {
-	background: #dbeafe;
-	color: #1d4ed8;
+.controls span {
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
 }
 
-#game {
-	display: grid;
-	justify-content: center;
-	gap: 2px;
-	margin: 0 auto;
-	background: #e0e7ef;
-	padding: 16px;
-	border-radius: 12px;
-	box-shadow: 0 4px 24px #e0e7ef80;
-	max-width: 90vw;
+.controls .mines-count { color: var(--accent); }
+.controls .timer { color: #4ecdc4; }
+
+.btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.1s, box-shadow 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.board-wrap {
+  display: inline-block;
+  padding: 8px;
+  background: var(--cell-border);
+  border-radius: 6px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.board {
+  display: grid;
+  gap: 2px;
+  background: var(--cell-border);
 }
 
 .cell {
-	width: 32px;
-	height: 32px;
-	background: #f1f5f9;
-	border-radius: 4px;
-	border: 1px solid #cbd5e1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 1.2rem;
-	cursor: pointer;
-	user-select: none;
-	transition: background 0.2s, box-shadow 0.2s;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background: var(--cell-bg);
+  border: 2px solid;
+  border-top-color: #e0e0e0;
+  border-left-color: #e0e0e0;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
 }
-.cell:hover {
-	background: #e0e7ef;
-	box-shadow: 0 0 4px #60a5fa80;
+
+.cell:hover:not(.revealed):not(.flagged) {
+  background: #d0d0d0;
 }
+
 .cell.revealed {
-	background: #fff;
-	color: #222;
-	cursor: default;
-	box-shadow: none;
+  background: var(--cell-revealed);
+  border: 1px solid #9e9e9e;
+  cursor: default;
 }
-.cell.mine {
-	background: #fee2e2;
-	color: #dc2626;
+
+.cell.revealed.mine {
+  background: var(--cell-mine);
+  color: var(--accent);
 }
+
 .cell.flagged {
-	background: #fef9c3;
-	color: #eab308;
+  color: var(--flag);
+  font-size: 1.2rem;
 }
 
-#status {
-	text-align: center;
-	margin: 12px 0 8px 0;
-	font-size: 1.1rem;
-}
-.win {
-	color: #16a34a;
-	font-weight: bold;
-}
-.lose {
-	color: #dc2626;
-	font-weight: bold;
-}
-.retry-btn {
-	background: #e0e7ef;
-	color: #2563eb;
-	border: none;
-	border-radius: 6px;
-	padding: 6px 16px;
-	font-size: 1rem;
-	cursor: pointer;
-	margin-top: 10px;
-	transition: background 0.2s, color 0.2s;
-}
-.retry-btn:hover {
-	background: #dbeafe;
-	color: #1d4ed8;
-}
-.retry-btn {
-	margin-top: 12px;
-	padding: 8px 22px;
-	background: #f44;
-	color: #fff;
-	border: 2px solid #c00;
-	border-radius: 6px;
-	font-weight: bold;
-	font-size: 1em;
-	cursor: pointer;
-	transition: 0.2s;
-	box-shadow: 0 2px 8px #0002;
-}
-.retry-btn:hover {
-	background: #c00;
+.cell.num-1 { color: var(--num-1); }
+.cell.num-2 { color: var(--num-2); }
+.cell.num-3 { color: var(--num-3); }
+.cell.num-4 { color: var(--num-4); }
+.cell.num-5 { color: var(--num-5); }
+.cell.num-6 { color: var(--num-6); }
+.cell.num-7 { color: var(--num-7); }
+.cell.num-8 { color: var(--num-8); }
+
+.message {
+  margin-top: 16px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  min-height: 28px;
+  text-align: center;
 }
 
-body {
-	margin: 0;
-	font-family: Arial, sans-serif;
-	background: #222;
-	color: #fff;
-	text-align: center;
+.message.win { color: #2ecc71; }
+.message.lose { color: var(--accent); }
+
+.difficulty {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-h1 {
-	margin-top: 20px;
+.difficulty .btn {
+  background: #2d4059;
+  font-size: 0.9rem;
+  padding: 8px 14px;
 }
 
-.controls {
-	margin: 15px;
+.difficulty .btn.active {
+  background: var(--accent);
 }
 
-button {
-	padding: 10px 20px;
-	margin: 5px;
-	background: #444;
-	border: 2px solid #888;
-	color: #fff;
-	cursor: pointer;
-	font-weight: bold;
-	border-radius: 6px;
-	transition: 0.2s;
-}
-button:hover {
-	background: #666;
-}
-
-#game {
-	display: grid;
-	justify-content: center;
-	margin: 20px auto;
-	gap: 2px;
-}
-
-.cell {
-	width: 32px;
-	height: 32px;
-	background: #333;
-	border: 1px solid #555;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-weight: bold;
-	cursor: pointer;
-	user-select: none;
-	font-size: 1.1em;
-}
-.cell.revealed {
-	background: #bbb;
-	color: #222;
-	cursor: default;
-}
-.cell.mine {
-	background: #c00;
-	color: #fff;
-}
-.win {
-	color: #0f0;
-	font-size: 20px;
-}
-.lose {
-	color: #f00;
-	font-size: 20px;
+@media (max-width: 500px) {
+  :root { --cell-size: 28px; }
+  .cell { font-size: 0.9rem; }
 }

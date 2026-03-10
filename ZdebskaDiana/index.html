@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minesweeper – Візуальний інтерфейс</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="minesweeper" aria-label="Гра Сапер (візуальна частина)">
+      <h1 class="minesweeper__title">Сапер</h1>
+
+      <section class="minesweeper__header" aria-label="Панель керування">
+        <div class="info-block" aria-label="Міни (лічильник)">
+          <span class="info-block__label">Міни</span>
+          <div class="info-block__value info-block__value--danger">
+            <span class="info-block__icon" aria-hidden="true">💣</span>
+            <span>010</span>
+          </div>
+        </div>
+
+        <button class="btn-start" type="button" aria-label="Старт гри">Старт</button>
+
+        <div class="info-block" aria-label="Таймер">
+          <span class="info-block__label">Час</span>
+          <div class="info-block__value">
+            <span class="info-block__icon" aria-hidden="true">⏱</span>
+            <span>000</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Демонстраційне поле гри -->
+      <section
+        class="minesweeper__board-wrapper"
+        aria-label="Ігрове поле (демо-стани клітинок)"
+      >
+        <div class="minesweeper__board" style="--cols: 8">
+          <!-- Ряд 1 -->
+          <div class="cell cell--closed" role="button" tabindex = "0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+
+          <!-- Ряд 2 (помилковий прапорець — без міни) -->
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--flag-wrong" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+
+          <!-- Ряд 3 -->
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--mine" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex = 0></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--open cell--num-0" role="button" tabindex="0"></div>
+          <div class="cell cell--open cell--num-1" role="button" tabindex="0">1</div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+
+          <!-- Ряд 4 -->
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"  ></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--open cell--num-2" role="button" tabindex="0">2</div>
+          <div class="cell cell--open cell--num3" role="button" tabindex="0">3</div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+
+          <!-- Ряд 5 -->
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--mine-triggered" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+
+          <!-- Ряд 6 -->
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+
+          <!-- Ряд 7 (правильний прапорець на міні) -->
+          <div class="cell cell--mine cell--flag" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0" ></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--flag" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          
+
+          <!-- Ряд 8 -->
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+          <div class="cell cell--closed" role="button" tabindex="0"></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

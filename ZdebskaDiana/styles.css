@@ -18,7 +18,6 @@
   --bg-panel-strong: #e3e4e8;
   --accent-orange: #e55320;
   --accent-dark: #111111;
-  --accent-light: #f7eff6;
   --border-soft: #d2d4da;
   --text-main: #111111;
   --text-muted: #6b6f7a;
@@ -30,7 +29,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--bg-page);
+  background: radial-gradient(circle at center, #fff5f0 0%, #ffe4d6 100%);
   font-family: var(--ui-font);
   color: var(--text-main);
 }
@@ -107,7 +106,6 @@ body {
   padding: 0.55rem 1.6rem;
   border-radius: 999px;
   border: none;
-  outline: none;
   font-size: 0.9rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -250,7 +248,7 @@ body {
   color: #374151;
 }
 
-/* Прапорець (на міні та без неї – вигляд однаковий) */
+/* Прапорець на закритій клітинці (правильний або ще не відомо, чи є там міна) */
 .cell--flag {
   position: relative;
   background: linear-gradient(145deg, #f3f4f6, #e5e7eb);
@@ -260,6 +258,7 @@ body {
     inset -2px -2px 0 rgba(2, 6, 23, 0.55),
     inset 1px 1px 0 rgba(255, 255, 255, 0.55),
     inset -1px -1px 0 rgba(2, 6, 23, 0.25);
+    animation: pop 120ms ease-out both;
 }
 
 .cell--flag::before {
@@ -285,8 +284,22 @@ body {
   filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.35));
 }
 
-.cell--flag {
-  animation: pop 120ms ease-out both;
+
+/* Прапорець, поставлений не на міну (помилка гравця після завершення гри) */
+.cell--flag-wrong {
+  background: linear-gradient(145deg, #fee2e2, #fecaca);
+  border: 1px solid #f87171;
+  box-shadow:
+    inset 2px 2px 0 rgba(255, 255, 255, 0.95),
+    inset -2px -2px 0 rgba(127, 29, 29, 0.55),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.55),
+    inset -1px -1px 0 rgba(127, 29, 29, 0.25);
+  color: #b91c1c;
+  font-size: 1.15rem;
+}
+
+.cell--flag-wrong::before {
+  content: "✖";
 }
 
 /* Міна – звичайна (відкрита, коли гра програна) */

@@ -1,207 +1,137 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Сапер</title>
-  <link rel="stylesheet" href="minesweeper.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Сапер (HTML + CSS)</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>💣 Сапер</h1>
-  <div class="game-panel">
-    <div class="controls">
-      <span class="mines-count">Міни: <b id="minesLeft">10</b></span>
-      <button class="btn" id="newGame">Нова гра</button>
-      <span class="timer">Час: <b id="timer">0</b></span>
+  <div class="app">
+    <h1>Сапер</h1>
+
+    <p class="hint">
+      Без JavaScript це “макет сапера”: клітинки відкриваються кліком, а цифри/міни задані наперед.
+    </p>
+
+    <div class="legend">
+      <span class="pill">ЛКМ</span> відкрити клітинку
+      <span class="sep">•</span>
+      <span class="pill">* (міна)</span> видно після відкриття
     </div>
-    <div class="board-wrap">
-      <div class="board" id="board"></div>
-    </div>
-    <div class="message" id="message"></div>
-    <div class="difficulty">
-      <button class="btn active" data-rows="9" data-cols="9" data-mines="10">Легко</button>
-      <button class="btn" data-rows="16" data-cols="16" data-mines="40">Середньо</button>
-      <button class="btn" data-rows="16" data-cols="30" data-mines="99">Важко</button>
+
+    <div class="board" aria-label="Поле сапера">
+      <!-- 10 × 10 (значення у data-v показується після відкриття) -->
+      <input id="c1" class="cell-toggle" type="checkbox"><label class="cell" for="c1" data-v=""></label>
+      <input id="c2" class="cell-toggle" type="checkbox"><label class="cell" for="c2" data-v="1"></label>
+      <input id="c3" class="cell-toggle" type="checkbox"><label class="cell" for="c3" data-v="1"></label>
+      <input id="c4" class="cell-toggle" type="checkbox"><label class="cell" for="c4" data-v=""></label>
+      <input id="c5" class="cell-toggle" type="checkbox"><label class="cell" for="c5" data-v="2"></label>
+      <input id="c6" class="cell-toggle" type="checkbox"><label class="cell" for="c6" data-v=""></label>
+      <input id="c7" class="cell-toggle" type="checkbox"><label class="cell" for="c7" data-v="1"></label>
+      <input id="c8" class="cell-toggle" type="checkbox"><label class="cell" for="c8" data-v=""></label>
+      <input id="c9" class="cell-toggle" type="checkbox"><label class="cell" for="c9" data-v="1"></label>
+      <input id="c10" class="cell-toggle" type="checkbox"><label class="cell" for="c10" data-v="*"></label>
+
+      <input id="c11" class="cell-toggle" type="checkbox"><label class="cell" for="c11" data-v=""></label>
+      <input id="c12" class="cell-toggle" type="checkbox"><label class="cell" for="c12" data-v="1"></label>
+      <input id="c13" class="cell-toggle" type="checkbox"><label class="cell" for="c13" data-v="*"></label>
+      <input id="c14" class="cell-toggle" type="checkbox"><label class="cell" for="c14" data-v="2"></label>
+      <input id="c15" class="cell-toggle" type="checkbox"><label class="cell" for="c15" data-v="2"></label>
+      <input id="c16" class="cell-toggle" type="checkbox"><label class="cell" for="c16" data-v="1"></label>
+      <input id="c17" class="cell-toggle" type="checkbox"><label class="cell" for="c17" data-v="1"></label>
+      <input id="c18" class="cell-toggle" type="checkbox"><label class="cell" for="c18" data-v=""></label>
+      <input id="c19" class="cell-toggle" type="checkbox"><label class="cell" for="c19" data-v="1"></label>
+      <input id="c20" class="cell-toggle" type="checkbox"><label class="cell" for="c20" data-v="1"></label>
+
+      <input id="c21" class="cell-toggle" type="checkbox"><label class="cell" for="c21" data-v=""></label>
+      <input id="c22" class="cell-toggle" type="checkbox"><label class="cell" for="c22" data-v="1"></label>
+      <input id="c23" class="cell-toggle" type="checkbox"><label class="cell" for="c23" data-v="1"></label>
+      <input id="c24" class="cell-toggle" type="checkbox"><label class="cell" for="c24" data-v="1"></label>
+      <input id="c25" class="cell-toggle" type="checkbox"><label class="cell" for="c25" data-v=""></label>
+      <input id="c26" class="cell-toggle" type="checkbox"><label class="cell" for="c26" data-v=""></label>
+      <input id="c27" class="cell-toggle" type="checkbox"><label class="cell" for="c27" data-v="1"></label>
+      <input id="c28" class="cell-toggle" type="checkbox"><label class="cell" for="c28" data-v="1"></label>
+      <input id="c29" class="cell-toggle" type="checkbox"><label class="cell" for="c29" data-v="1"></label>
+      <input id="c30" class="cell-toggle" type="checkbox"><label class="cell" for="c30" data-v=""></label>
+
+      <input id="c31" class="cell-toggle" type="checkbox"><label class="cell" for="c31" data-v=""></label>
+      <input id="c32" class="cell-toggle" type="checkbox"><label class="cell" for="c32" data-v=""></label>
+      <input id="c33" class="cell-toggle" type="checkbox"><label class="cell" for="c33" data-v=""></label>
+      <input id="c34" class="cell-toggle" type="checkbox"><label class="cell" for="c34" data-v="1"></label>
+      <input id="c35" class="cell-toggle" type="checkbox"><label class="cell" for="c35" data-v="1"></label>
+      <input id="c36" class="cell-toggle" type="checkbox"><label class="cell" for="c36" data-v="1"></label>
+      <input id="c37" class="cell-toggle" type="checkbox"><label class="cell" for="c37" data-v="*"></label>
+      <input id="c38" class="cell-toggle" type="checkbox"><label class="cell" for="c38" data-v="1"></label>
+      <input id="c39" class="cell-toggle" type="checkbox"><label class="cell" for="c39" data-v=""></label>
+      <input id="c40" class="cell-toggle" type="checkbox"><label class="cell" for="c40" data-v=""></label>
+
+      <input id="c41" class="cell-toggle" type="checkbox"><label class="cell" for="c41" data-v="1"></label>
+      <input id="c42" class="cell-toggle" type="checkbox"><label class="cell" for="c42" data-v="1"></label>
+      <input id="c43" class="cell-toggle" type="checkbox"><label class="cell" for="c43" data-v=""></label>
+      <input id="c44" class="cell-toggle" type="checkbox"><label class="cell" for="c44" data-v="1"></label>
+      <input id="c45" class="cell-toggle" type="checkbox"><label class="cell" for="c45" data-v="*"></label>
+      <input id="c46" class="cell-toggle" type="checkbox"><label class="cell" for="c46" data-v="1"></label>
+      <input id="c47" class="cell-toggle" type="checkbox"><label class="cell" for="c47" data-v="1"></label>
+      <input id="c48" class="cell-toggle" type="checkbox"><label class="cell" for="c48" data-v="1"></label>
+      <input id="c49" class="cell-toggle" type="checkbox"><label class="cell" for="c49" data-v=""></label>
+      <input id="c50" class="cell-toggle" type="checkbox"><label class="cell" for="c50" data-v=""></label>
+
+      <input id="c51" class="cell-toggle" type="checkbox"><label class="cell" for="c51" data-v="1"></label>
+      <input id="c52" class="cell-toggle" type="checkbox"><label class="cell" for="c52" data-v="*"></label>
+      <input id="c53" class="cell-toggle" type="checkbox"><label class="cell" for="c53" data-v="2"></label>
+      <input id="c54" class="cell-toggle" type="checkbox"><label class="cell" for="c54" data-v="1"></label>
+      <input id="c55" class="cell-toggle" type="checkbox"><label class="cell" for="c55" data-v="1"></label>
+      <input id="c56" class="cell-toggle" type="checkbox"><label class="cell" for="c56" data-v=""></label>
+      <input id="c57" class="cell-toggle" type="checkbox"><label class="cell" for="c57" data-v=""></label>
+      <input id="c58" class="cell-toggle" type="checkbox"><label class="cell" for="c58" data-v=""></label>
+      <input id="c59" class="cell-toggle" type="checkbox"><label class="cell" for="c59" data-v=""></label>
+      <input id="c60" class="cell-toggle" type="checkbox"><label class="cell" for="c60" data-v=""></label>
+
+      <input id="c61" class="cell-toggle" type="checkbox"><label class="cell" for="c61" data-v="1"></label>
+      <input id="c62" class="cell-toggle" type="checkbox"><label class="cell" for="c62" data-v="2"></label>
+      <input id="c63" class="cell-toggle" type="checkbox"><label class="cell" for="c63" data-v="2"></label>
+      <input id="c64" class="cell-toggle" type="checkbox"><label class="cell" for="c64" data-v=""></label>
+      <input id="c65" class="cell-toggle" type="checkbox"><label class="cell" for="c65" data-v=""></label>
+      <input id="c66" class="cell-toggle" type="checkbox"><label class="cell" for="c66" data-v=""></label>
+      <input id="c67" class="cell-toggle" type="checkbox"><label class="cell" for="c67" data-v="1"></label>
+      <input id="c68" class="cell-toggle" type="checkbox"><label class="cell" for="c68" data-v="1"></label>
+      <input id="c69" class="cell-toggle" type="checkbox"><label class="cell" for="c69" data-v="1"></label>
+      <input id="c70" class="cell-toggle" type="checkbox"><label class="cell" for="c70" data-v=""></label>
+
+      <input id="c71" class="cell-toggle" type="checkbox"><label class="cell" for="c71" data-v=""></label>
+      <input id="c72" class="cell-toggle" type="checkbox"><label class="cell" for="c72" data-v=""></label>
+      <input id="c73" class="cell-toggle" type="checkbox"><label class="cell" for="c73" data-v="1"></label>
+      <input id="c74" class="cell-toggle" type="checkbox"><label class="cell" for="c74" data-v="1"></label>
+      <input id="c75" class="cell-toggle" type="checkbox"><label class="cell" for="c75" data-v="1"></label>
+      <input id="c76" class="cell-toggle" type="checkbox"><label class="cell" for="c76" data-v=""></label>
+      <input id="c77" class="cell-toggle" type="checkbox"><label class="cell" for="c77" data-v=""></label>
+      <input id="c78" class="cell-toggle" type="checkbox"><label class="cell" for="c78" data-v="1"></label>
+      <input id="c79" class="cell-toggle" type="checkbox"><label class="cell" for="c79" data-v="*"></label>
+      <input id="c80" class="cell-toggle" type="checkbox"><label class="cell" for="c80" data-v="1"></label>
+
+      <input id="c81" class="cell-toggle" type="checkbox"><label class="cell" for="c81" data-v=""></label>
+      <input id="c82" class="cell-toggle" type="checkbox"><label class="cell" for="c82" data-v=""></label>
+      <input id="c83" class="cell-toggle" type="checkbox"><label class="cell" for="c83" data-v="1"></label>
+      <input id="c84" class="cell-toggle" type="checkbox"><label class="cell" for="c84" data-v="2"></label>
+      <input id="c85" class="cell-toggle" type="checkbox"><label class="cell" for="c85" data-v="2"></label>
+      <input id="c86" class="cell-toggle" type="checkbox"><label class="cell" for="c86" data-v="1"></label>
+      <input id="c87" class="cell-toggle" type="checkbox"><label class="cell" for="c87" data-v=""></label>
+      <input id="c88" class="cell-toggle" type="checkbox"><label class="cell" for="c88" data-v="1"></label>
+      <input id="c89" class="cell-toggle" type="checkbox"><label class="cell" for="c89" data-v="1"></label>
+      <input id="c90" class="cell-toggle" type="checkbox"><label class="cell" for="c90" data-v=""></label>
+
+      <input id="c91" class="cell-toggle" type="checkbox"><label class="cell" for="c91" data-v=""></label>
+      <input id="c92" class="cell-toggle" type="checkbox"><label class="cell" for="c92" data-v=""></label>
+      <input id="c93" class="cell-toggle" type="checkbox"><label class="cell" for="c93" data-v=""></label>
+      <input id="c94" class="cell-toggle" type="checkbox"><label class="cell" for="c94" data-v="1"></label>
+      <input id="c95" class="cell-toggle" type="checkbox"><label class="cell" for="c95" data-v="*"></label>
+      <input id="c96" class="cell-toggle" type="checkbox"><label class="cell" for="c96" data-v="1"></label>
+      <input id="c97" class="cell-toggle" type="checkbox"><label class="cell" for="c97" data-v=""></label>
+      <input id="c98" class="cell-toggle" type="checkbox"><label class="cell" for="c98" data-v=""></label>
+      <input id="c99" class="cell-toggle" type="checkbox"><label class="cell" for="c99" data-v=""></label>
+      <input id="c100" class="cell-toggle" type="checkbox"><label class="cell" for="c100" data-v=""></label>
     </div>
   </div>
-
-  <script>
-(function () {
-  const boardEl = document.getElementById('board');
-  const minesLeftEl = document.getElementById('minesLeft');
-  const timerEl = document.getElementById('timer');
-  const messageEl = document.getElementById('message');
-  let rows = 9, cols = 9, mines = 10;
-  let grid = [], revealed = [], flags = [], gameOver = false, started = false, timerId = 0, seconds = 0;
-
-  function init() {
-    gameOver = false;
-    started = false;
-    if (timerId) clearInterval(timerId);
-    timerId = 0;
-    seconds = 0;
-    timerEl.textContent = '0';
-    messageEl.textContent = '';
-    messageEl.className = 'message';
-    grid = [];
-    revealed = [];
-    flags = [];
-    for (let r = 0; r < rows; r++) {
-      grid[r] = [];
-      revealed[r] = [];
-      flags[r] = [];
-      for (let c = 0; c < cols; c++) {
-        grid[r][c] = 0;
-        revealed[r][c] = false;
-        flags[r][c] = false;
-      }
-    }
-    let placed = 0;
-    while (placed < mines) {
-      const r = Math.floor(Math.random() * rows);
-      const c = Math.floor(Math.random() * cols);
-      if (grid[r][c] !== -1) {
-        grid[r][c] = -1;
-        placed++;
-      }
-    }
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        if (grid[r][c] === -1) continue;
-        let n = 0;
-        for (let dr = -1; dr <= 1; dr++)
-          for (let dc = -1; dc <= 1; dc++) {
-            const nr = r + dr, nc = c + dc;
-            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] === -1) n++;
-          }
-        grid[r][c] = n;
-      }
-    }
-    render();
-  }
-
-  function render() {
-    minesLeftEl.textContent = mines - flags.flat().filter(Boolean).length;
-    boardEl.style.gridTemplateColumns = `repeat(${cols}, var(--cell-size))`;
-    boardEl.innerHTML = '';
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const cell = document.createElement('div');
-        cell.className = 'cell';
-        cell.dataset.r = r;
-        cell.dataset.c = c;
-        updateCell(cell, r, c);
-        cell.addEventListener('click', () => click(r, c));
-        cell.addEventListener('contextmenu', (e) => { e.preventDefault(); flag(r, c); });
-        boardEl.appendChild(cell);
-      }
-    }
-  }
-
-  function updateCell(cell, r, c) {
-    cell.className = 'cell';
-    cell.textContent = '';
-    if (flags[r][c]) {
-      cell.classList.add('flagged');
-      cell.textContent = '🚩';
-      return;
-    }
-    if (!revealed[r][c]) return;
-    cell.classList.add('revealed');
-    const v = grid[r][c];
-    if (v === -1) {
-      cell.classList.add('mine');
-      cell.textContent = '💣';
-    } else if (v > 0) {
-      cell.classList.add('num-' + v);
-      cell.textContent = v;
-    }
-  }
-
-  function startTimer() {
-    if (timerId) return;
-    timerId = setInterval(() => {
-      seconds++;
-      timerEl.textContent = seconds;
-    }, 1000);
-  }
-
-  function click(r, c) {
-    if (gameOver || revealed[r][c] || flags[r][c]) return;
-    if (!started) {
-      started = true;
-      startTimer();
-    }
-    if (grid[r][c] === -1) {
-      revealAll();
-      gameOver = true;
-      messageEl.textContent = 'Ви програли!';
-      messageEl.classList.add('lose');
-      if (timerId) clearInterval(timerId);
-      return;
-    }
-    reveal(r, c);
-    if (checkWin()) {
-      gameOver = true;
-      messageEl.textContent = 'Перемога!';
-      messageEl.classList.add('win');
-      if (timerId) clearInterval(timerId);
-    }
-  }
-
-  function reveal(r, c) {
-    if (r < 0 || r >= rows || c < 0 || c >= cols || revealed[r][c] || flags[r][c]) return;
-    revealed[r][c] = true;
-    const cell = boardEl.querySelector(`[data-r="${r}"][data-c="${c}"]`);
-    if (cell) updateCell(cell, r, c);
-    if (grid[r][c] === 0) {
-      for (let dr = -1; dr <= 1; dr++)
-        for (let dc = -1; dc <= 1; dc++) reveal(r + dr, c + dc);
-    }
-  }
-
-  function revealAll() {
-    for (let r = 0; r < rows; r++)
-      for (let c = 0; c < cols; c++)
-        revealed[r][c] = true;
-    const cells = boardEl.querySelectorAll('.cell');
-    cells.forEach(cell => {
-      const r = +cell.dataset.r, c = +cell.dataset.c;
-      updateCell(cell, r, c);
-    });
-  }
-
-  function flag(r, c) {
-    if (gameOver || revealed[r][c]) return;
-    if (!started) startTimer();
-    flags[r][c] = !flags[r][c];
-    const cell = boardEl.querySelector(`[data-r="${r}"][data-c="${c}"]`);
-    if (cell) updateCell(cell, r, c);
-    minesLeftEl.textContent = mines - flags.flat().filter(Boolean).length;
-  }
-
-  function checkWin() {
-    let revealedSafe = 0;
-    for (let r = 0; r < rows; r++)
-      for (let c = 0; c < cols; c++)
-        if (revealed[r][c] && grid[r][c] !== -1) revealedSafe++;
-    return revealedSafe === rows * cols - mines;
-  }
-
-  document.getElementById('newGame').addEventListener('click', init);
-  document.querySelectorAll('.difficulty .btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-      document.querySelectorAll('.difficulty .btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      rows = +this.dataset.rows;
-      cols = +this.dataset.cols;
-      mines = +this.dataset.mines;
-      init();
-    });
-  });
-
-  init();
-})();
-  </script>
 </body>
 </html>

@@ -1,0 +1,297 @@
+/* Базові стилі сторінки */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #f4f1ea, #e8dfcf);
+  color: #2f2b24;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px;
+}
+
+/* Хедер гри */
+.game-header {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  background: #f7f2e8;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.game-header__title {
+  font-size: 1.4rem;
+  font-weight: 720;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5a4a38;
+}
+
+.game-header__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.status-block {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fffaf0;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  min-width: 90px;
+}
+
+.status-block__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8a7a63;
+  margin-bottom: 4px;
+}
+
+.status-block__value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #3a332a;
+}
+
+/* Кнопка нової гри */
+.button {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 10px 16px;
+  border-radius: 999px;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+}
+
+.button--primary {
+  background-color: #f29b2b; /* теплий помаранчевий */
+  color: #2f2417;
+  font-weight: 600;
+  box-shadow: 0 6px 14px rgba(242, 155, 43, 0.45);
+}
+
+.button--primary:hover {
+  background-color: #ffad3f;
+  box-shadow: 0 8px 18px rgba(242, 155, 43, 0.55);
+}
+
+.button--primary:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 9px rgba(242, 155, 43, 0.4);
+}
+
+.button:focus-visible {
+  outline: 2px solid #f29b2b;
+  outline-offset: 2px;
+}
+
+/* Основна частина гри */
+.game-main {
+  width: 100%;
+  max-width: 480px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Ігрове поле: сітка з клітинок 10x10 */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* Базовий вигляд клітинки */
+.cell {
+  position: relative;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  user-select: none;
+  transition: transform 0.04s ease, box-shadow 0.08s ease, background-color 0.12s ease, color 0.12s ease;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
+}
+
+.cell:focus-visible {
+  outline: 2px solid #f29b2b;
+  outline-offset: 1px;
+}
+
+.cell:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+}
+
+/* 4. СТАНИ КЛІТИНОК */
+
+/* Закрита клітинка */
+.cell--closed {
+  background: linear-gradient(135deg, #d3c4a7, #b7a48a);
+  color: transparent;
+}
+
+.cell--closed:hover {
+  background: linear-gradient(135deg, #ddcfb4, #c3b29a);
+}
+
+/* Відкрита клітинка */
+.cell--open {
+  background: #f6efe3;
+  color: #2f2b24;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+/* Кольори цифр (як у класичному сапері, але без синього/фіолетового як основи) */
+.cell--open:nth-child(10n + 1) { color: #2a7f3b; }  /* 1 - зелений */
+.cell--open:nth-child(10n + 2) { color: #e67e22; }  /* 2 - помаранчевий */
+.cell--open:nth-child(10n + 3) { color: #c0392b; }  /* 3 - червоний */
+
+/* Клітинка з прапорцем (на міні та без неї) */
+.cell--flag {
+  background: linear-gradient(135deg, #fdf7e3, #f4e6c4);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18), inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.cell--flag::before {
+  content: "⚑";
+  font-size: 1.1rem;
+  color: #d35400;
+}
+
+/* Прапорець на міні (для візуалізації, фон більш насичений */
+.cell--flag-on-mine {
+  background: linear-gradient(135deg, #fbe3c2, #f0c591);
+}
+
+/* Клітинка з міною (звичайна) */
+.cell--mine {
+  background: #4a4035;
+}
+
+.cell--mine::before {
+  content: "💣";
+  font-size: 1.1rem;
+}
+
+/* Клітинка з міною, на яку натиснув користувач */
+.cell--mine-hit {
+  background: radial-gradient(circle at 30% 30%, #ffdc8b, #f15b40 40%, #3b1c16 75%);
+  animation: mine-hit-pulse 0.8s ease-out both;
+}
+
+.cell--mine-hit::before {
+  content: "💥";
+  font-size: 1.2rem;
+}
+
+@keyframes mine-hit-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(241, 91, 64, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 6px rgba(241, 91, 64, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
+  }
+}
+
+/* 5. Адаптивність */
+@media (max-width: 480px) {
+  .game-header {
+    padding: 12px 14px;
+  }
+
+  .game-header__title {
+    font-size: 1.1rem;
+  }
+
+  .status-block {
+    padding: 6px 8px;
+    min-width: 80px;
+  }
+
+  .status-block__value {
+    font-size: 1rem;
+  }
+
+  .button--primary {
+    padding-inline: 12px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .game-header__status {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .game-grid {
+    gap: 3px;
+  }
+}
+
+.game-board {
+  background: #d3ccbf;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.22);
+
+  display: grid;
+  /* количество колонок будем задавать через JS */
+  grid-template-columns: repeat(10, minmax(20px, 1fr));
+  gap: 4px;
+}
+
+/* маленький стиль для select */
+.size-select {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #f5efe4;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #3a352f;
+  outline: none;
+}
+.size-select:focus {
+  border-color: #3c7a3c;
+  box-shadow: 0 0 0 1px rgba(60, 122, 60, 0.3);
+}

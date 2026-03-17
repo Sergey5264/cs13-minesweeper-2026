@@ -26,17 +26,54 @@ function generateField(rows, cols, minesCount, excludeRow = -1, excludeCol = -1)
     attempts++;
     const idx = Math.floor(Math.random() * totalCells);
     const r = Math.floor(idx / cols), c = idx % cols;
-    if (r == excludeRow && c == excludeCol || minePositions.has(`${r},${c}`)) continue;
+    if (r === excludeRow && c === excludeCol || minePositions.has(`${r},${c}`)) continue;
 
     field[r][c].type = 'mine';
-    countNeighbourMines(field, rows, cols);
+    updateNeighbourMinesAroundCell(field, rows, cols, r, c, -1);
     let valid = true;
-    for (let rr = 0; rr < rows && valid; rr++)
-      for (let cc = 0; cc < cols; cc++)
-        if (field[rr][cc].type == 'empty' && field[rr][cc].neighborMines > 3) { valid = false; break; }
-    if (valid) minePositions.add(`${r},${c}`);
-    else { field[r][c].type = 'empty'; countNeighbourMines(field, rows, cols); }
-  }
+    for (const [delta_row, delta_col] of DIRS) {
+      const new_row = r + delta_row;
+      const new_col = c + delta_col;
+      if (new_row >= 0 && new_row < rows && new_col >= 0 && new_col < cols) {
+        if (field[new_row][new_col].type === 'empty' && field[new_row][new_col].neighborMines > 3) {
+          valid = false; 
+          break;
+        }
+      }
+    }
+    if (valid) {
+      minePositions.add(`${r},${c}`);
+    } else {
+      updateNeighbourMinesAroundCell(field, rows, cils, r, c, -1);
+      field[r][c].type = 'empty';
+    }
+    }
+    if (minePositions.size < minesCount) {
+      const availablePositions = [];
+      for (let row = 0; row < rows; row++){
+        for (let col = 0; col < cols; col++) {
+          const isExcludedCell = row === excludeRow && col === excludeCol;
+          const hasMineAlready = field[row][col].type === 'mine';
+          if (!isExcludedCell && hasMineAlready){
+            availablePositions.push({row, col});
+          }
+        }
+      }
+      for (let currentIndex = availablePositions.length - 1; currentIndex > 0; currentIndex--) {
+        const randomIndex = Math.floor(Math.random() * (currentIndex + 1));
+        const temporaryPosition = availablePositions[currentIndex];
+        availablePositions[currentIndex] = availablePositions[randomIndex];
+        availablePositions[randomIndex] = temporaryPosition;
+      }
+      const remainingMineToPlace = Math.min(minesCount - minePositions.size, availablePositions.length);
+      for (let index = 0; index < remainingMineToPlace; index++) {
+        const minePosition = availablePositions[index];
+        field[minePosition.row][minePosition.col].type = 'mine';
+  minePositions.add (`${minePosition.row},${minePosition.col}`);    
+      }
+    }
+  countNeighbourMines(field, rows, cols);
+  
   return field;
 }
 function countNeighbourMines(field, rows, cols) {
@@ -44,12 +81,23 @@ function countNeighbourMines(field, rows, cols) {
     for (let c = 0; c < cols; c++) {
       if (field[r][c].type == 'mine') continue;
       let count = 0;
-      for (const [dr, dc] of DIRS) {
-        const nr = r + dr, nc = c + dc;
-        if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && field[nr][nc].type == 'mine') count++;
+      for (const [delta_row, delta_col] of DIRS) {
+        const new_row = r + delta_row, new_col = c + delta_col;
+        if (new_row >= 0 && new_row < rows && new_col >= 0 && new_col < cols && field[new_row][new_col].type == 'mine') count++;
       }
       field[r][c].neighborMines = count;
     }
+}
+function updateNeighbourMinesAroundCell(field, rows, cols, mineRow, mineCol, delta) {
+  for (const [delta_row, delta_col] of DIRS) {
+    const neighbourRow = mineRow + delta_row;
+    const neighbourCol = mineCol + delta_col;
+    if (neighbourRow >= 0 && neighbourRow < rows && neighbourCol >= 0 && neighbourCol < cols) {
+      if (field[neighbourRow][neighbourCol].type !== 'mine') {
+        field[neighbourRow][neighbourCol].neighborMines += delta;
+      }
+    }
+  }
 }
 function openCell(row, col) {
   if (gameState.status !== 'process') return;
@@ -85,7 +133,7 @@ function openCellRecursive(row, col) {
   if (cell.state == 'opened' || cell.state == 'flagged') return;
   cell.state = 'opened';
   if (cell.neighborMines > 0) return;
-  for (const [dr, dc] of DIRS) openCellRecursive(row + dr, col + dc);
+  for (const [delta_row, delta_col] of DIRS) openCellRecursive(row + delta_row, col + delta_col);
 }
 function toggleFlag(row, col) {
   if (gameState.status !== 'process') return;
@@ -192,12 +240,13 @@ function revealAllMines() {
 }
 function updateFlagsDisplay() {
   if (!flagsValueEl) return;
-  let count = 0;
+  let flaggedCellsCount = 0;
   const { field, rows, cols, minesCount } = gameState;
   for (let r = 0; r < rows; r++)
      for (let c = 0; c < cols; c++)
-      if (field[r][c].state == 'flagged') count++;
-  flagsValueEl.textContent = String(minesCount - count).padStart(3, '0');
+      if (field[r][c].state == 'flagged') flaggedCellsCount++;
+  const remainingFlagsCount = Math.max(0, flaggedCellsCount++)
+  flagsValueEl.textContent = String(remainingFlagsCount).padStart(3, '0');
 }
 function resetGame() {
   stopTimer();

@@ -44,7 +44,7 @@ function generateField(rows, cols, minesCount, excludeRow = -1, excludeCol = -1)
     if (valid) {
       minePositions.add(`${r},${c}`);
     } else {
-      updateNeighbourMinesAroundCell(field, rows, cils, r, c, -1);
+      updateNeighbourMinesAroundCell(field, rows, cols, r, c, -1);
       field[r][c].type = 'empty';
     }
     }
@@ -109,7 +109,8 @@ function openCell(row, col) {
     startTimer();
     if (cell.type == 'mine') {
       gameState.field = generateField(gameState.rows, gameState.cols, gameState.minesCount, row, col);
-      return openCell(row, col);
+      openCell(row, col);
+      return;
     }
   }
 
@@ -128,12 +129,19 @@ function openCell(row, col) {
 }
 function openCellRecursive(row, col) {
   const { rows, cols } = gameState;
-  if (row < 0 || row >= rows || col < 0 || col >= cols) return;
-  const cell = gameState.field[row][col];
-  if (cell.state == 'opened' || cell.state == 'flagged') return;
-  cell.state = 'opened';
-  if (cell.neighborMines > 0) return;
-  for (const [delta_row, delta_col] of DIRS) openCellRecursive(row + delta_row, col + delta_col);
+  const stack = [[row, col]];
+  while (stack.length > 0 ) {
+    const [r, c] = stack.pop();
+    if (r < 0 || r >= rows || c < 0 || c >= cols) continue;
+    const cell = gameState.field[r][c];
+    if (cell.state === 'opened'  || cell.state === 'flagged') continue;
+    cell.state = 'opened';
+    if (cell.neighborMines === 0) {
+      for (const [dr, dc] of DIRS) {
+        stack.push([r + dr, c + dc]);
+      }
+    }
+  }
 }
 function toggleFlag(row, col) {
   if (gameState.status !== 'process') return;
@@ -245,8 +253,10 @@ function updateFlagsDisplay() {
   for (let r = 0; r < rows; r++)
      for (let c = 0; c < cols; c++)
       if (field[r][c].state == 'flagged') flaggedCellsCount++;
-  const remainingFlagsCount = Math.max(0, flaggedCellsCount++)
-  flagsValueEl.textContent = String(remainingFlagsCount).padStart(3, '0');
+  const remainingFlagsCount = minesCount - flaggedCellsCount;
+  flagsValueEl.textContent = remainingFlagsCount >= 0
+    ? String(remainingFlagsCount).padStart(3, '0')
+    : `0-${Math.abs(remainingFlagsCount)}`;
 }
 function resetGame() {
   stopTimer();

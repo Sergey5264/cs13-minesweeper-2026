@@ -21,6 +21,15 @@ const DEFAULT_ROWS = 8;
 const DEFAULT_COLS = 8;
 const DEFAULT_MINE_COUNT = 10;
 
+// DOM ЕЛЕМЕНТИ 
+const boardElement = document.getElementById('gameBoard');
+const mineCountElement = document.getElementById('mineCount');
+const flagCountElement = document.getElementById('flagCount');
+const timerElement = document.getElementById('timer');
+const newGameBtn = document.getElementById('newGameBtn');
+const gameMessageElement = document.getElementById('gameMessage');
+const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+
 // Об'єкт стану гри (глобальні параметри)
 let gameState = {
   rows: DEFAULT_ROWS,
@@ -52,9 +61,10 @@ function generateField(rows, cols, minesCount) {
   
   if (gameState.timerId) {
     clearInterval(gameState.timerId);
+    gameState.timerId = null;
   }
 
-  // Ініціалізація порожньої сітки
+    // Ініціалізація порожньої сітки
   gameField = [];
   for (let row = 0; row < rows; row++) {
     let currentRow = [];
@@ -68,7 +78,7 @@ function generateField(rows, cols, minesCount) {
     gameField.push(currentRow);
   }
 
-  // Розстановка мін випадковим чином (з перевіркою дублікатів)
+    // Розстановка мін випадковим чином (з перевіркою дублікатів)
   let minesPlaced = 0;
   while (minesPlaced < minesCount) {
     let randRow = Math.floor(Math.random() * rows);
@@ -80,8 +90,104 @@ function generateField(rows, cols, minesCount) {
     }
   }
 
-  // Одразу рахуємо сусідів для згенерованого поля
+    // Одразу рахуємо сусідів для згенерованого поля
   countNeighbourMines();
+
+  // Оновлюємо візуал
+  renderBoard();
+
+}
+
+  // ВІЗУАЛІЗАЦІЯ (DOM РЕНДЕРИНГ)
+// ВІЗУАЛІЗАЦІЯ (DOM РЕНДЕРИНГ)
+function renderBoard() {
+  boardElement.innerHTML = '';
+  boardElement.style.gridTemplateColumns = `repeat(${gameState.cols}, var(--cell-size))`;
+
+  for (let row = 0; row < gameState.rows; row++) {
+    for (let col = 0; col < gameState.cols; col++) {
+      
+      const cellData = gameField[row][col]; // Беремо дані цієї клітинки з масиву
+      const cellElement = document.createElement('div');
+      cellElement.classList.add('cell');
+
+      // --- ДОДАЄМО ВІЗУАЛІЗАЦІЮ СТАНУ ---
+      
+      // Якщо клітинка відкрита
+      if (cellData.state === CELL_STATE.OPEN) {
+        cellElement.classList.add('revealed'); // Робимо її втиснутою
+        
+        // Якщо це міна - малюємо бомбу і вибух
+        if (cellData.type === CELL_CONTENT.MINE) {
+          cellElement.classList.add('mine', 'exploded');
+          cellElement.textContent = '💣';
+        } 
+        // Якщо не міна, але є сусіди - малюємо цифру і фарбуємо її
+        else if (cellData.neighborMines > 0) {
+          cellElement.textContent = cellData.neighborMines;
+          cellElement.classList.add(`num${cellData.neighborMines}`); // Додає класи типу num1, num2
+        }
+      } 
+      // Якщо на клітинці стоїть прапорець
+      else if (cellData.state === CELL_STATE.FLAGGED) {
+        cellElement.classList.add('flag');
+        cellElement.textContent = '🚩';
+      }
+
+      // --- РЕАКЦІЯ НА КЛІКИ ---
+      cellElement.addEventListener('click', () => {
+        if (!gameState.timerId && gameState.status === GAME_STATUS.PLAYING) {
+          startTimer();
+        }
+        openCell(row, col);
+        checkWinCondition(); // Одразу перевіряємо, чи ми не виграли
+        renderBoard();
+      });
+
+      cellElement.addEventListener('contextmenu', (event) => {
+        if (!gameState.timerId && gameState.status === GAME_STATUS.PLAYING) {
+          startTimer();
+        }
+        event.preventDefault();
+        toggleFlag(row, col);
+        renderBoard();
+      });
+
+      boardElement.appendChild(cellElement);
+    }
+  }
+  updateUI();
+}
+
+// ОНОВЛЕННЯ ІНТЕРФЕЙСУ
+function updateUI() {
+  // Рахуємо, скільки прапорців зараз стоїть на полі
+  let flagsPlaced = 0;
+  for (let row = 0; row < gameState.rows; row++) {
+    for (let col = 0; col < gameState.cols; col++) {
+      if (gameField[row][col].state === CELL_STATE.FLAGGED) {
+        flagsPlaced++;
+      }
+    }
+  }
+
+  // Виводимо цифри в HTML
+  mineCountElement.textContent = gameState.minesCount - flagsPlaced;
+  flagCountElement.textContent = flagsPlaced;
+  timerElement.textContent = gameState.gameTime;
+
+  // Керуємо повідомленням про кінець гри
+  if (gameState.status === GAME_STATUS.WIN) {
+    gameMessageElement.textContent = '🏆 ПЕРЕМОГА! Всі міни знайдено!';
+    gameMessageElement.classList.remove('hidden');
+    gameMessageElement.style.color = '#27ae60'; // Зелений
+  } else if (gameState.status === GAME_STATUS.LOST) {
+    gameMessageElement.textContent = '💥 БУМ! ВИ ПРОГРАЛИ!';
+    gameMessageElement.classList.remove('hidden');
+    gameMessageElement.style.color = '#c0392b'; // Червоний
+  } else {
+    gameMessageElement.classList.add('hidden'); // Ховаємо під час гри
+  }
 }
 
 
@@ -188,6 +294,7 @@ function startTimer() {
   gameState.timerId = setInterval(() => {
     if (gameState.status === GAME_STATUS.PLAYING) {
       gameState.gameTime++;
+      timerElement.textContent = gameState.gameTime;
     }
   }, 1000);
 }
@@ -213,3 +320,33 @@ function checkWinCondition() {
     console.log("Win! All safe cells are opened.");
   }
 }
+
+// КНОПКИ УПРАВЛІННЯ 
+// Кнопка "Нова гра"
+newGameBtn.addEventListener('click', () => {
+  // Перезапускаємо гру з поточними налаштуваннями
+  generateField(gameState.rows, gameState.cols, gameState.minesCount);
+});
+
+// Кнопки вибору складності
+difficultyButtons.forEach(button => {
+  button.addEventListener('click', (event) => {
+    // Знімаємо підсвітку з усіх кнопок
+    difficultyButtons.forEach(btn => btn.classList.remove('active'));
+    // Підсвічуємо ту, на яку натиснули
+    event.target.classList.add('active');
+
+    // Читаємо рівень складності з атрибута data-level і запускаємо гру
+    const level = event.target.getAttribute('data-level');
+    if (level === 'easy') {
+      generateField(8, 8, 10);
+    } else if (level === 'medium') {
+      generateField(12, 12, 20);
+    } else if (level === 'hard') {
+      generateField(16, 16, 40);
+    }
+  });
+});
+
+// Запускаємо першу гру автоматично при завантаженні сторінки
+generateField(8, 8, 10);

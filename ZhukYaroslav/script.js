@@ -97,7 +97,7 @@ function generateField(rows, cols, minesCount) {
   countNeighbourMines();
 }
 
-function StartGame(rows, cols, minesCount) {
+function startGame(rows, cols, minesCount) {
   generateField(rows, cols, minesCount);
   renderBoard();
 }
@@ -329,7 +329,7 @@ function checkWinCondition() {
 // Кнопка "Нова гра"
 newGameButton.addEventListener('click', () => {
   // Перезапускаємо гру з поточними налаштуваннями
-  StartGame(gameState.rows, gameState.cols, gameState.minesCount);
+  startGame(gameState.rows, gameState.cols, gameState.minesCount);
 });
 
 // Кнопки вибору складності
@@ -343,14 +343,14 @@ difficultyButtons.forEach(button => {
     // Читаємо рівень складності з атрибута data-level і запускаємо гру
     const level = event.target.getAttribute('data-level');
     if (level === 'easy') {
-      StartGame(8, 8, 10);
+      startGame(8, 8, 10);
     } else if (level === 'medium') {
-      StartGame(12, 12, 20);
+      startGame(12, 12, 20);
     } else if (level === 'hard') {
-      StartGame(16, 16, 40);
+      startGame(16, 16, 40);
     }
   });
 });
 
 // Запускаємо першу гру автоматично при завантаженні сторінки
-StartGame(8, 8, 10);
+startGame(8, 8, 10);

@@ -135,10 +135,9 @@ h1 {
 
 /* ІГРОВЕ ПОЛЕ */
 .game-board {
-    display: flex;
-    flex-wrap: wrap;
+    display: inline-grid;
     justify-content: center;
-    width: 288px;
+    width: fit-content;
     margin: 0 auto 20px auto;
     gap: 4px; 
     background: #e0e0e0;
@@ -147,10 +146,6 @@ h1 {
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Додали класи для різних рівнів складності (вирішує зауваження про жорстку сітку) */
-.game-board.easy { grid-template-columns: repeat(var(--cols-easy), var(--cell-size)); }
-.game-board.medium { grid-template-columns: repeat(var(--cols-medium), var(--cell-size)); }
-.game-board.hard { grid-template-columns: repeat(var(--cols-hard), var(--cell-size)); }
 
 /* СТАНИ КЛІТИНОК */
 .cell {
@@ -253,6 +248,4 @@ h1 {
     .info-panel { gap: 15px; }
     .cell { width: 28px; height: 28px; }
     
-    /* Оновлюємо ширину під менші клітинки */
-    .game-board { width: 272px; } 
 }

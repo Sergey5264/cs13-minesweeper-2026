@@ -1,7 +1,7 @@
 // Глобальний стан гри
 const gameState = {
     rows: 9, 
-    cols: 10,
+    cols: 9,
     minesCount: 15,
     status: 'process',
     gameTime: 0,

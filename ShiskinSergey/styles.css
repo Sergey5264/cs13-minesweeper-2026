@@ -38,7 +38,7 @@ body {
 
 .game-header__title {
   font-size: 1.4rem;
-  font-weight: 720;
+  font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #5a4a38;
@@ -118,10 +118,43 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
+/* Повідомлення Win/Lose */
+.message {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fffaf0;
+  color: #3a332a;
+}
+
+.message--hidden {
+  display: none;
+}
+
+.message--win {
+  background: #eef7ef;
+  border-color: rgba(42, 127, 59, 0.25);
+  color: #205f2c;
+}
+
+.message--lose {
+  background: #fbefee;
+  border-color: rgba(192, 57, 43, 0.25);
+  color: #7b241c;
+}
+
+.message--info {
+  background: #fffaf0;
+}
+
 /* Ігрове поле: сітка з клітинок 10x10 */
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(var(--cols, 10), 1fr);
   gap: 4px;
   width: 100%;
   aspect-ratio: 1 / 1;

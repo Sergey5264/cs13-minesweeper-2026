@@ -13,136 +13,22 @@
       <div class="game-header__status">
         <div class="status-block">
           <span class="status-block__label">Час</span>
-          <span id="timer" class="status-block__value">00:00</span>
+          <span id="timer" class="status-block__value">0</span>
         </div>
         <div class="status-block">
-          <span class="status-block__label">Знайдено прапорів</span>
-          <span id="flags-count" class="status-block__value">0 / 10</span>
+          <span class="status-block__label">Прапорці</span>
+          <span id="flags-count" class="status-block__value">0</span>
         </div>
-        <div class="status-block">
-          <span class="status-block__label">Перемоги</span>
-          <span id="wins-count" class="status-block__value">0</span>
-        </div>
-        <button id="new-game" class="button button--primary">Нова гра</button>
+        <button id="start-restart" class="button button--primary">Старт</button>
       </div>
     </header>
 
     <main class="game-main">
-      <div class="game-grid" aria-label="Ігрове поле">
-        <!-- 10x10 клітинок, всі стартово закриті -->
-        <!-- 100 кнопок -->
-        <!-- Рядок 1 -->
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <!-- Рядок 2 -->
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <!-- Рядок 3 -->
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <!-- Рядок 4 -->
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <!-- Рядок 5 -->
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <!-- Рядок 6 -->
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <!-- Рядок 7 -->
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <!-- Рядок 8 -->
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <!-- Рядок 9 -->
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <!-- Рядок 10 -->
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-        <button class="cell cell--closed" type="button"></button>
-      </div>
+      <div id="message" class="message message--hidden" role="status" aria-live="polite"></div>
+      <div id="grid" class="game-grid" aria-label="Ігрове поле"></div>
     </main>
   </div>
+
+  <script src="script.js" defer></script>
 </body>
 </html>

@@ -1,13 +1,12 @@
 const ROWS = 10;
 const COLS = 10;
 const MINES_COUNT = 5; // "немного меньше мин"
-const FLOOD_OPEN_LIMIT = 22; // ограничение на "заливку" за 1 клик
 
 /** @typedef {{ index:number, row:number, col:number, isMine:boolean, isOpen:boolean, isFlagged:boolean, adjacentMines:number }} Cell */
 
 const timerEl = document.getElementById('timer');
 const flagsEl = document.getElementById('flags-count');
-const buttonEl = document.getElementById('start-restart');
+const buttonEl = document.getElementById('new-game');
 const gridEl = document.getElementById('grid');
 const messageEl = document.getElementById('message');
 
@@ -59,13 +58,13 @@ function rowColToIndex(row, col) {
 function neighborsOf(index) {
   const { row, col } = indexToRowCol(index);
   const result = [];
-  for (let dr = -1; dr <= 1; dr += 1) {
-    for (let dc = -1; dc <= 1; dc += 1) {
-      if (dr === 0 && dc === 0) continue;
-      const rr = row + dr;
-      const cc = col + dc;
-      if (rr < 0 || rr >= ROWS || cc < 0 || cc >= COLS) continue;
-      result.push(rowColToIndex(rr, cc));
+  for (let dRow = -1; dRow <= 1; dRow += 1) {
+    for (let dCol = -1; dCol <= 1; dCol += 1) {
+      if (dRow === 0 && dCol === 0) continue;
+      const neighborRow = row + dRow;
+      const neighborCol = col + dCol;
+      if (neighborRow < 0 || neighborRow >= ROWS || neighborCol < 0 || neighborCol >= COLS) continue;
+      result.push(rowColToIndex(neighborRow, neighborCol));
     }
   }
   return result;
@@ -173,7 +172,6 @@ function revealMines(hitIndex) {
 function openCellRecursive(startIndex) {
   const queue = [startIndex];
   const visited = new Set();
-  let openedThisClick = 0;
 
   while (queue.length) {
     const idx = queue.shift();
@@ -187,14 +185,7 @@ function openCellRecursive(startIndex) {
 
     cell.isOpen = true;
     openedSafeCount += 1;
-    openedThisClick += 1;
     applyCellToDom(cell);
-
-    // Если уже открыли достаточно клеток за один клик — остановиться,
-    // чтобы не раскрывать половину поля одним нажатием.
-    if (openedThisClick >= FLOOD_OPEN_LIMIT) {
-      break;
-    }
 
     if (cell.adjacentMines === 0) {
       neighborsOf(idx).forEach((n) => {

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minesweeper</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  
+  <div class="game-container">
+    <header class="game-header">
+      <div class="status-item" title="Прапорці" aria-label="Кількість прапорців">
+        <span class="icon" aria-hidden="true">🚩</span>
+        <span id="flags-count">0</span>
+      </div>
+      
+      <button class="reset-button" id="reset-btn">Нова Гра</button>
+      
+      <div class="status-item" title="Час" aria-label="Час гри">
+        <span class="icon" aria-hidden="true">⏱</span>
+        <span id="game-timer">0</span>
+      </div>
+    </header>
+
+    <main class="game-board" id="board" aria-label="Ігрове поле сапера">
+      </main>
+  </div>
+  
+  <div id="game-modal" class="modal" aria-modal="true" role="dialog">
+    <div class="modal-content">
+      <h2 id="modal-title">Результат</h2>
+      <p id="modal-message">Опис результату</p>
+      <button id="play-again-button" class="reset-button">Грати знову</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

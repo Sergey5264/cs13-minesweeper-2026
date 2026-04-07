@@ -6,23 +6,21 @@
     --cell-bg: #adb5bd;
     --cell-revealed-bg: #e9ecef;
     --focus-color: #1971c2;
-    /* Розміри сітки (запит Copilot) */
+    /* Розміри сітки */
     --grid-cols: 5;
     --cell-size: 60px;
-    /* Збільшимо клітинки, щоб гра виглядала масштабніше */
-}
-
-* {
+  }
+  
+  * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
-
-body {
+  }
+  
+  body {
     background: linear-gradient(-45deg, #654ea3, #eaafc8, #4facfe, #00f2fe);
     background-size: 400% 400%;
-    /* Розтягуємо фон для анімації */
     animation: gradientBG 15s ease infinite;
     display: flex;
     justify-content: center;
@@ -31,24 +29,24 @@ body {
     margin: 0;
     padding: 20px;
     background-attachment: fixed;
-}
-
-@keyframes gradientBG {
+  }
+  
+  @keyframes gradientBG {
     0% {
-        background-position: 0% 50%;
+      background-position: 0% 50%;
     }
-
+  
     50% {
-        background-position: 100% 50%;
+      background-position: 100% 50%;
     }
-
+  
     100% {
-        background-position: 0% 50%;
+      background-position: 0% 50%;
     }
-}
-
-/* 2. Основний контейнер */
-.game-container {
+  }
+  
+  /* 2. Основний контейнер */
+  .game-container {
     position: relative;
     background-color: var(--primary-blue);
     padding: 20px;
@@ -57,11 +55,10 @@ body {
     display: inline-block;
     z-index: 1;
     overflow: hidden;
-    /* Щоб градієнт не вилазив за межі радіуса */
-}
-
-/* Анімований контур через ::before */
-.game-container::before {
+  }
+  
+  /* Анімований контур через ::before */
+  .game-container::before {
     content: '';
     position: absolute;
     top: -50%;
@@ -69,37 +66,36 @@ body {
     width: 200%;
     height: 200%;
     background: conic-gradient(transparent,
-            #eaafc8,
-            #654ea3,
-            transparent 30%);
+      #eaafc8,
+      #654ea3,
+      transparent 30%);
     animation: rotateBorder 4s linear infinite;
     z-index: -2;
-}
-
-/* Внутрішня підкладка, щоб перекрити центр градієнта */
-.game-container::after {
+  }
+  
+  /* Внутрішня підкладка */
+  .game-container::after {
     content: '';
     position: absolute;
     inset: 4px;
-    /* Товщина твого майбутнього контуру */
     background: var(--primary-blue);
     border-radius: 10px;
     z-index: -1;
     backdrop-filter: blur(10px);
-}
-
-@keyframes rotateBorder {
+  }
+  
+  @keyframes rotateBorder {
     from {
-        transform: rotate(0deg);
+      transform: rotate(0deg);
     }
-
+  
     to {
-        transform: rotate(360deg);
+      transform: rotate(360deg);
     }
-}
-
-/* 3. Хедер */
-.game-header {
+  }
+  
+  /* 3. Хедер */
+  .game-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -109,9 +105,9 @@ body {
     border-radius: 10px;
     border: 3px solid #ffffff;
     gap: 20px;
-}
-
-.status-item {
+  }
+  
+  .status-item {
     font-weight: bold;
     font-size: 1.5rem;
     color: #000000;
@@ -119,9 +115,9 @@ body {
     align-items: center;
     gap: 8px;
     white-space: nowrap;
-}
-
-.reset-button {
+  }
+  
+  .reset-button {
     padding: 10px 20px;
     background-color: rgba(36, 89, 186, 0.36);
     color: #ffffff;
@@ -132,35 +128,34 @@ body {
     transition: all 0.2s ease;
     text-transform: uppercase;
     font-size: 0.9rem;
-}
-
-.reset-button:hover {
+  }
+  
+  .reset-button:hover {
     background-color: var(--btn-hover);
     transform: scale(1.05);
-}
-
-/* Додано фокус для доступності (запит Copilot) */
-.reset-button:focus-visible {
+  }
+  
+  .reset-button:focus-visible {
     outline: 3px solid var(--focus-color);
     outline-offset: 2px;
-}
-
-.reset-button:active {
+  }
+  
+  .reset-button:active {
     transform: translateY(2px);
-}
-
-/* 4. Ігрове поле */
-.game-board {
+  }
+  
+  /* 4. Ігрове поле */
+  .game-board {
     display: grid;
     grid-template-columns: repeat(var(--grid-cols), var(--cell-size));
     grid-auto-rows: var(--cell-size);
     gap: 5px;
     justify-content: center;
     padding: 20px;
-}
-
-/* 5. Клітинка */
-.cell {
+  }
+  
+  /* 5. Клітинка */
+  .cell {
     width: var(--cell-size);
     height: var(--cell-size);
     background-color: var(--cell-bg);
@@ -174,65 +169,60 @@ body {
     font-size: 1rem;
     transition: background-color 0.1s;
     box-shadow: inset -2px -2px 0px rgba(0, 0, 0, 0.2),
-        inset 2px 2px 0px rgba(255, 255, 255, 0.4);
+      inset 2px 2px 0px rgba(255, 255, 255, 0.4);
     user-select: none;
-}
-
-/* Фокус для клітинок */
-.cell:focus-visible {
+  }
+  
+  .cell:focus-visible {
     outline: 3px solid var(--focus-color);
     outline-offset: -4px;
-    /* щоб рамка була всередині */
-}
-
-.cell:hover:not(.revealed) {
+  }
+  
+  .cell:hover:not(.revealed) {
     background-color: #ced4da;
-}
-
-/* Стани клітинок */
-.cell.revealed {
+  }
+  
+  /* Стани клітинок */
+  .cell.revealed {
     background-color: var(--cell-revealed-bg);
     box-shadow: none;
     border: 1px solid #dee2e6;
     cursor: default;
     color: #010d19;
-    /* Об'єднано сюди (запит Yaroslav666nn) */
-}
-
-.cell.flag {
+  }
+  
+  .cell.flag {
     background-color: var(--cell-bg);
-}
-
-/* Підсвітка невірного прапорця (запит iamredl-lab) */
-.cell.flag-wrong {
+  }
+  
+  .cell.flag-wrong {
     background-color: #ffbaba;
     border: 2px solid #ff0000;
-}
-
-.cell.mine {
+  }
+  
+  .cell.mine {
     background-color: #dee2e6;
-}
-
-.cell.exploded {
+  }
+  
+  .cell.exploded {
     background-color: #ff8787;
     border: 2px solid #fa5252;
-}
-
-.cell:not(.revealed) {
+  }
+  
+  .cell:not(.revealed) {
     background: linear-gradient(145deg, #adb5bd, #ced4da);
     transition: all 0.2s;
-}
-
-.cell:not(.revealed):hover {
+  }
+  
+  .cell:not(.revealed):hover {
     filter: brightness(1.1);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Контейнер модалки (затемнення фону) */
-.modal {
+  }
+  
+  /* Контейнер модалки */
+  .modal {
     display: none;
-    /* Спочатку приховано */
     position: fixed;
     top: 0;
     left: 0;
@@ -240,15 +230,14 @@ body {
     height: 100%;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(5px);
-    /* Розмиття фону гри */
     justify-content: center;
     align-items: center;
     z-index: 1000;
     animation: fadeIn 0.3s ease;
-}
-
-/* Саме вікно з повідомленням */
-.modal-content {
+  }
+  
+  /* Вікно з повідомленням */
+  .modal-content {
     background: white;
     padding: 30px;
     border-radius: 15px;
@@ -256,58 +245,58 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     transform: scale(0.8);
     animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-}
-
-#modal-title {
+  }
+  
+  #modal-title {
     font-size: 2.5rem;
     margin-bottom: 10px;
-}
-
-#modal-message {
+  }
+  
+  #modal-message {
     font-size: 1.2rem;
     margin-bottom: 20px;
     color: #444;
-}
-
-/* Анімації */
-@keyframes fadeIn {
+  }
+  
+  /* Анімації */
+  @keyframes fadeIn {
     from {
-        opacity: 0;
+      opacity: 0;
     }
-
+  
     to {
-        opacity: 1;
+      opacity: 1;
     }
-}
-
-@keyframes popIn {
+  }
+  
+  @keyframes popIn {
     to {
-        transform: scale(1);
+      transform: scale(1);
     }
-}
-
-/* Кольори для перемоги/програшу */
-.status-win {
+  }
+  
+  /* Кольори для перемоги/програшу */
+  .status-win {
     color: #2ecc71;
-}
-
-.status-lose {
+  }
+  
+  .status-lose {
     color: #e74c3c;
-}
-
-/* Кольори цифр замість інлайн-стилів (запит Copilot) */
-.cell.number-1 {
+  }
+  
+  /* Кольори цифр */
+  .cell.number-1 {
     color: #0000ff;
-}
-
-.cell.number-2 {
+  }
+  
+  .cell.number-2 {
     color: #008000;
-}
-
-.cell.number-3 {
+  }
+  
+  .cell.number-3 {
     color: #ff0000;
-}
-
-.cell.number-4 {
+  }
+  
+  .cell.number-4 {
     color: #000080;
-}
+  }

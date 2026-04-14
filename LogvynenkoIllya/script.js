@@ -193,19 +193,13 @@ function updateStatusMessage(state) {
 
 
 function updateStartButtonFace(state) {
-  if (state.status === GAME_STATUS.WON) {
-    startButtonElement.textContent = '😎';
-
-    return;
-  }
-
-  if (state.status === GAME_STATUS.LOST) {
-    startButtonElement.textContent = '😵';
-
-    return;
-  }
-
-  startButtonElement.textContent = '🙂';
+  const faces = {
+    [GAME_STATUS.WON]: '😎',
+    [GAME_STATUS.LOST]: '😵',
+    [GAME_STATUS.PLAYING]: '🙂'
+  };
+  
+  startButtonElement.textContent = faces[state.status] || '🙂';
 }
 
 

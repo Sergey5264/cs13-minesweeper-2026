@@ -1,122 +1,25 @@
 <!DOCTYPE html>
 <html lang="uk">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minesweeper - Сучасний дизайн</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <div class="minesweeper-app">
-
         <header class="game-header">
-            <div class="counter flag-counter">🚩 010</div>
-            <button class="btn-restart" title="Почати нову гру"
-                aria-label="Почати нову гру">🙂</button>
+            <div class="counter flag-counter">🚩 015</div>
+            <button class="btn-restart" title="Почати нову гру" aria-label="Почати нову гру">🙂</button>
             <div class="counter time-counter" id="timer">⏱️ 000</div>
         </header>
 
         <main class="game-board">
-
-            <div class="cell open num-1">1</div>
-            <div class="cell open num-2">2</div>
-            <div class="cell open num-3">3</div>
-            <div class="cell open num-4">4</div>
-            <div class="cell open num-5">5</div>
-            <div class="cell open num-6">6</div>
-            <div class="cell open num-7">7</div>
-            <div class="cell open num-8">8</div>
-            <div class="cell open"></div>
-
-            <div class="cell open exploded">💣</div>
-            <div class="cell open mine">💣</div>
-            <div class="cell flag">🚩</div>
-            <div class="cell open wrong-flag">❌</div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div> 
-            <div class="cell"></div>
-            <div class="cell"></div>
-
-        </main>
+            </main>
+        
+        <p id="game-message" style="text-align: center; margin-top: 15px; font-weight: bold;" role="status" aria-live="polite"></p>
     </div>
 
-    <script>
-        const timerElement = document.getElementById('timer');
-        let seconds = 0;
-
-        setInterval(() => {
-            seconds++;
-            const formattedTime = String(seconds).padStart(3, '0');
-            timerElement.textContent = `⏱️ ${formattedTime}`;
-        }, 1000);
-    </script>
+    <script src="script.js"></script>
 </body>
-
 </html>

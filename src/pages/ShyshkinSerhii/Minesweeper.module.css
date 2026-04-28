@@ -1,0 +1,8 @@
+.container { display: flex; flex-direction: column; align-items: center; padding: 20px; background-color: #faf3e0; min-height: 100vh; }
+.hud { display: flex; justify-content: space-between; width: 100%; max-width: 400px; margin-bottom: 20px; padding: 10px; background: #fff; border-radius: 8px; }
+.grid { display: grid; gap: 4px; background-color: #e6ccb2; padding: 10px; border-radius: 8px; }
+.cell { width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: none; }
+.closed { background-color: #ddc3a5; }
+.open { background-color: #ede0d4; color: #7f5539; }
+.win { color: green; font-weight: bold; }
+.lose { color: red; font-weight: bold; }

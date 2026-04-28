@@ -10,9 +10,11 @@ const GAME_STATUS = { READY: 'ready', RUNNING: 'running', WON: 'won', LOST: 'los
 const Minesweeper = () => {
   const [board, setBoard] = useState([]);
   const [status, setStatus] = useState(GAME_STATUS.READY);
-  const [flagsAvailable, setFlagsAvailable] = useState(MINES_COUNT);
   const [seconds, setSeconds] = useState(0);
   const [message, setMessage] = useState({ text: '', kind: 'info' });
+
+  // Вирахований стан (Derived state) замість окремого useState
+  const flagsAvailable = MINES_COUNT - board.filter(c => c.isFlagged).length;
 
   const neighborsOf = useCallback((index) => {
     const row = Math.floor(index / COLS), col = index % COLS, res = [];
@@ -26,17 +28,20 @@ const Minesweeper = () => {
     return res;
   }, []);
 
-  const createBoard = useCallback(() => {
-    const total = ROWS * COLS, indices = Array.from({ length: total }, (_, i) => i).sort(() => Math.random() - 0.5);
-    const mineSet = new Set(indices.slice(0, MINES_COUNT));
+  // Створюємо порожнє поле без мін для безпечного першого кліку
+  const createEmptyBoard = useCallback(() => {
+    const total = ROWS * COLS;
     const newBoard = Array.from({ length: total }, (_, i) => ({
-      index: i, isMine: mineSet.has(i), isOpen: false, isFlagged: false, adjacentMines: 0
+      index: i, isMine: false, isOpen: false, isFlagged: false, adjacentMines: 0
     }));
-    newBoard.forEach(c => { if (!c.isMine) c.adjacentMines = neighborsOf(c.index).reduce((acc, ni) => acc + (newBoard[ni].isMine ? 1 : 0), 0); });
     setBoard(newBoard);
-  }, [neighborsOf]);
+    setStatus(GAME_STATUS.READY);
+    setSeconds(0);
+    setMessage({ text: '', kind: 'info' });
+  }, []);
 
-  useEffect(() => { createBoard(); }, [createBoard]);
+  useEffect(() => { createEmptyBoard(); }, [createEmptyBoard]);
+
   useEffect(() => {
     let interval;
     if (status === GAME_STATUS.RUNNING) interval = setInterval(() => setSeconds(s => s + 1), 1000);
@@ -45,32 +50,84 @@ const Minesweeper = () => {
 
   const handleCellClick = (index) => {
     if (status === GAME_STATUS.WON || status === GAME_STATUS.LOST) return;
-    if (status === GAME_STATUS.READY) setStatus(GAME_STATUS.RUNNING);
-    const newBoard = [...board], cell = newBoard[index];
-    if (cell.isOpen || cell.isFlagged) return;
-    if (cell.isMine) {
-      newBoard.forEach(c => { if(c.isMine) c.isOpen = true; });
-      setBoard(newBoard); setStatus(GAME_STATUS.LOST); setMessage({ text: 'Поразка!', kind: 'lose' });
+
+    let currentBoard = [...board];
+    let currentCell = currentBoard[index];
+
+    if (currentCell.isOpen || currentCell.isFlagged) return;
+
+    // Safe first move: генеруємо міни тільки під час першого кліку
+    if (status === GAME_STATUS.READY) {
+      setStatus(GAME_STATUS.RUNNING);
+      const total = ROWS * COLS;
+      // Виключаємо індекс першого кліку, щоб там точно не було міни
+      const indices = Array.from({ length: total }, (_, i) => i).filter(i => i !== index).sort(() => Math.random() - 0.5);
+      const mineSet = new Set(indices.slice(0, MINES_COUNT));
+
+      // Створюємо нові об'єкти (без мутацій)
+      currentBoard = currentBoard.map((c, i) => ({ ...c, isMine: mineSet.has(i) }));
+      currentBoard = currentBoard.map((c, i) => {
+        if (c.isMine) return c;
+        const adjacentMines = neighborsOf(i).reduce((acc, ni) => acc + (currentBoard[ni].isMine ? 1 : 0), 0);
+        return { ...c, adjacentMines };
+      });
+      currentCell = currentBoard[index];
+    }
+
+    // Програш (якщо потрапили на міну)
+    if (currentCell.isMine) {
+      const lostBoard = currentBoard.map(c => c.isMine ? { ...c, isOpen: true } : c);
+      setBoard(lostBoard);
+      setStatus(GAME_STATUS.LOST);
+      setMessage({ text: 'Поразка!', kind: 'lose' });
       return;
     }
-    const queue = [index], visited = new Set();
+
+    // Відкриття клітинок (без мутацій!)
+    const queue = [index];
+    const visited = new Set();
+    const nextBoard = [...currentBoard];
+
     while (queue.length) {
-      const idx = queue.shift(); if (visited.has(idx)) continue; visited.add(idx);
-      const c = newBoard[idx]; if (c.isOpen || c.isFlagged || c.isMine) continue;
-      c.isOpen = true; if (c.adjacentMines === 0) neighborsOf(idx).forEach(n => queue.push(n));
+      const idx = queue.shift();
+      if (visited.has(idx)) continue;
+      visited.add(idx);
+
+      const c = nextBoard[idx];
+      if (c.isOpen || c.isFlagged || c.isMine) continue;
+
+      // Створюємо новий об'єкт клітинки замість мутації
+      nextBoard[idx] = { ...c, isOpen: true };
+
+      if (c.adjacentMines === 0) {
+        neighborsOf(idx).forEach(n => queue.push(n));
+      }
     }
-    setBoard(newBoard);
-    if (newBoard.filter(c => c.isOpen && !c.isMine).length === (ROWS * COLS - MINES_COUNT)) {
-      setStatus(GAME_STATUS.WON); setMessage({ text: 'Перемога!', kind: 'win' });
+
+    setBoard(nextBoard);
+
+    // Перевірка перемоги
+    if (nextBoard.filter(c => c.isOpen && !c.isMine).length === (ROWS * COLS - MINES_COUNT)) {
+      setStatus(GAME_STATUS.WON);
+      setMessage({ text: 'Перемога!', kind: 'win' });
     }
   };
 
   const handleContextMenu = (e, index) => {
-    e.preventDefault(); if (status !== GAME_STATUS.RUNNING && status !== GAME_STATUS.READY) return;
-    const newBoard = [...board], cell = newBoard[index];
+    e.preventDefault();
+    if (status !== GAME_STATUS.RUNNING && status !== GAME_STATUS.READY) return;
+
+    const newBoard = [...board];
+    const cell = newBoard[index];
+
     if (cell.isOpen) return;
-    if (cell.isFlagged) { cell.isFlagged = false; setFlagsAvailable(f => f + 1); }
-    else if (flagsAvailable > 0) { cell.isFlagged = true; setFlagsAvailable(f => f - 1); }
+
+    // Створюємо новий об'єкт замість мутації
+    if (cell.isFlagged) {
+      newBoard[index] = { ...cell, isFlagged: false };
+    } else if (flagsAvailable > 0) {
+      newBoard[index] = { ...cell, isFlagged: true };
+    }
     setBoard(newBoard);
   };
 
@@ -79,7 +136,7 @@ const Minesweeper = () => {
       <div className={styles.hud}>
         <Timer seconds={seconds} />
         <div>🚩: {flagsAvailable}</div>
-        <button onClick={() => { setStatus(GAME_STATUS.READY); setSeconds(0); setFlagsAvailable(MINES_COUNT); setMessage({ text: '', kind: 'info' }); createBoard(); }}>Рестарт</button>
+        <button type="button" onClick={createEmptyBoard}>Рестарт</button>
       </div>
       <GameStatus text={message.text} kind={message.kind} />
       <Board board={board} cols={COLS} onCellClick={handleCellClick} onContextMenu={handleContextMenu} />
@@ -88,4 +145,3 @@ const Minesweeper = () => {
 };
 
 export default Minesweeper;
-// Triggering push
